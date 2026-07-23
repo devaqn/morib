@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ======================================================
+     SEO E COMPARTILHAMENTO
+     ====================================================== -->
+<title>Morib Macedo — Workshop de Comunicação Estratégica | Recife</title>
+<meta name="description" content="Uma nova oratória para liderar. Workshop presencial em Recife com o jornalista e palestrante Morib Macedo, na INTEGRA — A Nova Escola de Psicanálise. Vagas limitadas.">
+<meta name="theme-color" content="#10173a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Workshop de Comunicação Estratégica — Uma Nova Oratória para Liderar">
+<meta property="og:description" content="Com o jornalista e palestrante Morib Macedo. Presencial em Recife, na INTEGRA — A Nova Escola de Psicanálise. Vagas limitadas.">
+<meta property="og:image" content="img/flyer-workshop.jpg">
+<meta property="og:locale" content="pt_BR">
+
+<!-- favicon inline (monograma M) — zero requisição extra -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2310173a'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='38' font-weight='bold' fill='%23f6b92b' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+
+<!-- ======================================================
+     PERFORMANCE
+     - preconnect: abre a conexão com o Google Fonts mais cedo
+     - preload da foto do hero: a imagem mais importante da página
+     - fontes com display=swap: o texto aparece antes da fonte carregar
+     - somente os pesos de fonte realmente usados são baixados
+     ====================================================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="img/morib-retrato.jpg" fetchpriority="high">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:wght@400;600;700&family=Abril+Fatface&display=swap" rel="stylesheet">
+
+<!-- estilos e script (defer = baixa em paralelo, executa após o parse) -->
+<link rel="stylesheet" href="css/style.css">
+<script src="js/main.js" defer></script>
+</head>
+<body>
+
+<!-- barra de progresso de leitura (preenchida pelo JS) -->
+<div class="progress" aria-hidden="true"></div>
+
+<!-- ======================================================
+     HEADER — fixo; transparente sobre o hero, branco ao rolar;
+     esconde ao descer e reaparece ao subir (JS)
+     ====================================================== -->
+<header id="topbar">
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="Início">
+      <b>Morib Macedo</b>
+      <span>Jornalista · Palestrante</span>
+    </a>
+    <div class="nav-right">
+      <a class="nav-phone" href="https://wa.me/5581973268686" target="_blank" rel="noopener">
+        <small>Inscrições</small>
+        <b>(81) 97326-8686</b>
+      </a>
+      <a class="btn btn-y" href="https://wa.me/5581973268686?text=Ol%C3%A1!%20Quero%20garantir%20minha%20vaga%20no%20Workshop%20de%20Comunica%C3%A7%C3%A3o%20Estrat%C3%A9gica%20%E2%80%93%20Uma%20Nova%20Orat%C3%B3ria%20para%20Liderar." target="_blank" rel="noopener">Garantir vaga</a>
+    </div>
+  </div>
+</header>
+
+<!-- ======================================================
+     HERO — primeira dobra: promessa + apresentador + CTA
+     A classe .in (adicionada pelo JS no load) dispara a
+     entrada cinematográfica em sequência.
+     ====================================================== -->
+<section class="hero" id="top">
+  <!-- marca d'água gigante com parallax controlado pelo JS -->
+  <span class="hero-mark" aria-hidden="true">ORATÓRIA</span>
+
+  <div class="wrap hero-grid">
+    <div>
+      <p class="kicker">Workshop de Comunicação Estratégica · Recife</p>
+      <h1>Uma nova <em>oratória</em> para quem precisa liderar.</h1>
+      <p class="lede">
+        O método de quem vive da palavra: um dia de imersão presencial para você
+        falar com segurança, clareza e presença — diante de qualquer público.
+      </p>
+      <div class="hero-ctas">
+        <a class="btn btn-y" href="https://wa.me/5581973268686?text=Ol%C3%A1!%20Quero%20garantir%20minha%20vaga%20no%20Workshop%20de%20Comunica%C3%A7%C3%A3o%20Estrat%C3%A9gica%20%E2%80%93%20Uma%20Nova%20Orat%C3%B3ria%20para%20Liderar." target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2.05 22l5.3-1.39a9.87 9.87 0 0 0 4.69 1.19h.01c5.45 0 9.89-4.44 9.89-9.9 0-2.64-1.03-5.13-2.9-7A9.82 9.82 0 0 0 12.04 2m0 18.01h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.23 8.23m4.52-6.16c-.25-.13-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.17.25-.64.8-.78.97-.14.16-.29.18-.54.06-.25-.13-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29"/></svg>
+          Garantir minha vaga
+        </a>
+        <a class="btn btn-ghost-w" href="#apresentador">Conhecer o método</a>
+      </div>
+      <!-- mini-ficha do evento -->
+      <div class="hero-meta">
+        <div><small>Realização</small><b>INTEGRA · Escola de Psicanálise</b></div>
+        <div><small>Formato</small><b>100% presencial</b></div>
+        <div><small>Turma</small><b>Vagas limitadas</b></div>
+      </div>
+    </div>
+
+    <!-- cartão de foto estilo polaroid, com tilt 3D que segue o mouse -->
+    <figure class="photo-card">
+      <div class="ph">
+        <img src="img/morib-retrato.jpg" alt="Morib Macedo, jornalista e palestrante"
+             width="265" height="810" fetchpriority="high" decoding="async">
+      </div>
+      <figcaption>
+        <div>
+          <b>Morib Macedo</b>
+          <small>Jornalista · Palestrante</small>
+        </div>
+        <a class="ig" href="https://www.instagram.com/palestrantemoribmacedo" target="_blank" rel="noopener" aria-label="Instagram de Morib Macedo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141b3d" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#141b3d" stroke="none"/></svg>
+        </a>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ======================================================
+     FAIXA DE REALIZAÇÃO — credibilidade logo após o hero
+     ====================================================== -->
+<div class="strip">
+  <div class="wrap">
+    <div class="strip-left">
+      <img src="img/integra-navy-sm.png" alt="INTEGRA — A Nova Escola de Psicanálise"
+           width="44" height="44" loading="lazy" decoding="async">
+      <div>
+        <small>Realização</small>
+        <b>INTEGRA — A Nova Escola de Psicanálise</b>
+      </div>
+    </div>
+    <div class="strip-right">
+      <a href="https://www.instagram.com/oratoriarecife" target="_blank" rel="noopener">@oratoriarecife</a>
+      <a href="https://wa.me/5581973268686" target="_blank" rel="noopener">(81) 97326-8686</a>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================
+     APRESENTADOR — a página é sobre ele; vem logo no topo.
+     data-stagger: os filhos .reveal entram em cascata.
+     ====================================================== -->
+<section class="section" id="apresentador">
+  <div class="wrap spk" data-stagger>
+    <div class="spk-visual reveal">
+      <!-- duotone azul que revela a cor real da foto no hover -->
+      <div class="frame">
+        <img src="img/morib-retrato.jpg" alt="Morib Macedo"
+             width="265" height="810" loading="lazy" decoding="async">
+      </div>
+      <span class="tag">O apresentador</span>
+    </div>
+    <div class="reveal">
+      <p class="kicker">Quem conduz o workshop</p>
+      <h2>A palavra é o instrumento de trabalho de Morib Macedo.</h2>
+      <p>
+        Jornalista de carreira, Morib aprendeu no dia a dia da profissão o que decide
+        se alguém escuta você ou não: <b>clareza, tempo e credibilidade</b>.
+      </p>
+      <p>
+        O workshop é esse método aplicado. Nada de fórmula decorada: você fala,
+        treina, recebe <b>orientação individual</b> e ajusta na hora — com devolutiva
+        de quem comunica profissionalmente todos os dias.
+      </p>
+      <!-- ficha rápida -->
+      <div class="spk-meta">
+        <div><small>Atuação</small><b>Jornalista e palestrante</b></div>
+        <div><small>Base</small><b>Recife · PE</b></div>
+        <div><small>Instagram</small><a href="https://www.instagram.com/palestrantemoribmacedo" target="_blank" rel="noopener"><b>@palestrantemoribmacedo</b></a></div>
+      </div>
+      <div class="spk-ctas">
+        <a class="btn btn-navy" href="https://wa.me/5581973268686?text=Ol%C3%A1!%20Quero%20garantir%20minha%20vaga%20no%20Workshop%20de%20Comunica%C3%A7%C3%A3o%20Estrat%C3%A9gica%20com%20o%20Morib%20Macedo." target="_blank" rel="noopener">Treinar com o Morib</a>
+        <a class="btn btn-ghost" href="https://www.instagram.com/palestrantemoribmacedo" target="_blank" rel="noopener">Seguir no Instagram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- letreiro em movimento contínuo — vida entre as seções -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Comunicação estratégica <i>◆</i> Oratória para liderar <i>◆</i> Presença <i>◆</i> Persuasão <i>◆</i> Autoridade <i>◆</i></span>
+    <span>Comunicação estratégica <i>◆</i> Oratória para liderar <i>◆</i> Presença <i>◆</i> Persuasão <i>◆</i> Autoridade <i>◆</i></span>
+  </div>
+</div>
+
+<!-- ======================================================
+     PARA QUEM É — lista editorial com hover interativo
+     ====================================================== -->
+<section class="section soft-bg" id="publico">
+  <div class="wrap" data-stagger>
+    <div class="sec-top reveal">
+      <div>
+        <p class="kicker">Para quem é</p>
+        <h2>Feito para quem vive de convencer pessoas.</h2>
+        <p class="lede">Cliente, aluno, equipe ou banca: se o seu resultado depende de como você fala, este workshop foi montado para você.</p>
+      </div>
+      <span class="sec-num">01</span>
+    </div>
+    <ul class="aud">
+      <li class="reveal">
+        <span class="n">a.</span>
+        <h3>Empreendedores</h3>
+        <p>Vender a visão, negociar melhor, liderar o time.</p>
+      </li>
+      <li class="reveal">
+        <span class="n">b.</span>
+        <h3>Estudantes</h3>
+        <p>Apresentações, defesas, entrevistas e seleções.</p>
+      </li>
+      <li class="reveal">
+        <span class="n">c.</span>
+        <h3>Educadores</h3>
+        <p>Aulas que prendem a atenção do início ao fim.</p>
+      </li>
+      <li class="reveal">
+        <span class="n">d.</span>
+        <h3>Gestores</h3>
+        <p>Reuniões, feedbacks e equipes que se movem.</p>
+      </li>
+      <li class="reveal">
+        <span class="n">e.</span>
+        <h3>Profissionais liberais</h3>
+        <p>Comunicar valor e fechar com confiança.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======================================================
+     O MÉTODO — 6 transformações; as réguas se desenham
+     na revelação e ficam amarelas no hover
+     ====================================================== -->
+<section class="section" id="metodo">
+  <div class="wrap" data-stagger>
+    <div class="sec-top reveal">
+      <div>
+        <p class="kicker">O método</p>
+        <h2>O que muda na sua comunicação.</h2>
+      </div>
+      <span class="sec-num">02</span>
+    </div>
+    <div class="chg">
+      <article class="reveal">
+        <span class="n">01</span>
+        <h3>Segurança para falar em público</h3>
+        <p>Sem decoreba e sem travar — mesmo sob pressão.</p>
+      </article>
+      <article class="reveal">
+        <span class="n">02</span>
+        <h3>Estrutura de fala</h3>
+        <p>Começo, meio, fim e um objetivo claro: convencer.</p>
+      </article>
+      <article class="reveal">
+        <span class="n">03</span>
+        <h3>Presença</h3>
+        <p>Voz, postura e gesto dizendo a mesma coisa que você.</p>
+      </article>
+      <article class="reveal">
+        <span class="n">04</span>
+        <h3>Conexão</h3>
+        <p>Escuta ativa e leitura de quem está na sua frente.</p>
+      </article>
+      <article class="reveal">
+        <span class="n">05</span>
+        <h3>Estratégia</h3>
+        <p>A mesma mensagem, adaptada a cada contexto.</p>
+      </article>
+      <article class="reveal">
+        <span class="n">06</span>
+        <h3>Liderança</h3>
+        <p>A fala como ferramenta de conduzir pessoas e decisões.</p>
+      </article>
+    </div>
+    <div class="chg-foot reveal">
+      <a class="btn btn-y" href="https://wa.me/5581973268686?text=Ol%C3%A1!%20Quero%20garantir%20minha%20vaga%20no%20Workshop%20de%20Comunica%C3%A7%C3%A3o%20Estrat%C3%A9gica%20%E2%80%93%20Uma%20Nova%20Orat%C3%B3ria%20para%20Liderar." target="_blank" rel="noopener">Quero desenvolver minha oratória</a>
+      <small>Inscrição direta pelo WhatsApp · (81) 97326-8686</small>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     INTEGRA — onde acontece (realização em destaque)
+     ====================================================== -->
+<section class="section integra" id="integra">
+  <div class="wrap int-grid" data-stagger>
+    <div class="int-logo reveal">
+      <img src="img/integra-cream.png" alt="INTEGRA — A Nova Escola de Psicanálise"
+           width="800" height="800" loading="lazy" decoding="async">
+    </div>
+    <div class="reveal">
+      <p class="kicker">Onde acontece</p>
+      <h2>Uma escola dedicada a entender pessoas.</h2>
+      <p class="lede">
+        O workshop é realizado na INTEGRA — A Nova Escola de Psicanálise, espaço de
+        desenvolvimento humano no Recife. Não é por acaso: comunicação é comportamento,
+        e ali o ambiente é feito para você treinar, errar e evoluir com segurança.
+      </p>
+      <div class="int-info">
+        <div><small>Cidade</small><b>Recife · PE</b></div>
+        <div><small>Formato</small><b>100% presencial</b></div>
+        <div><small>Turma</small><b>Reduzida</b></div>
+        <div><small>Endereço</small><b>Enviado na inscrição</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     FAQ — objeções respondidas antes do CTA final
+     ====================================================== -->
+<section class="section" id="faq">
+  <div class="wrap" data-stagger>
+    <div class="sec-top reveal">
+      <div>
+        <p class="kicker">Perguntas frequentes</p>
+        <h2>O que mais perguntam antes de se inscrever.</h2>
+      </div>
+      <span class="sec-num">03</span>
+    </div>
+    <div class="faq reveal">
+      <details>
+        <summary>Preciso ter experiência com oratória?
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </summary>
+        <p class="ans">Não. O método funciona tanto para quem trava na frente dos outros quanto para quem já apresenta e quer subir de nível. A prática respeita o momento de cada participante.</p>
+      </details>
+      <details>
+        <summary>Onde e quando acontece?
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </summary>
+        <p class="ans">Na INTEGRA — A Nova Escola de Psicanálise, no Recife/PE. O encontro é 100% presencial. Data, horário e endereço completo são confirmados na inscrição pelo WhatsApp.</p>
+      </details>
+      <details>
+        <summary>Como garanto minha vaga?
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </summary>
+        <p class="ans">Pelo WhatsApp <a href="https://wa.me/5581973268686" target="_blank" rel="noopener">(81) 97326-8686</a>. A equipe confirma os detalhes, as formas de pagamento e finaliza sua inscrição em poucos minutos.</p>
+      </details>
+      <details>
+        <summary>Por que as vagas são limitadas?
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </summary>
+        <p class="ans">Porque cada participante treina e recebe orientação individual do Morib. Turma pequena é condição do método — e por isso as vagas costumam se esgotar rápido.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     CTA FINAL — faixa amarela com cartão de inscrição
+     ====================================================== -->
+<section class="cta" id="inscricao">
+  <div class="wrap" data-stagger>
+    <div class="reveal">
+      <p class="kicker">Inscrições abertas</p>
+      <h2>Garanta sua vaga antes que a turma feche.</h2>
+      <p>
+        As vagas são poucas de propósito: turma pequena é o que garante prática
+        individual e atenção de verdade a cada participante.
+      </p>
+    </div>
+    <div class="cta-box reveal">
+      <form id="leadForm">
+        <label for="leadName">Seu nome</label>
+        <input type="text" id="leadName" name="nome" placeholder="Como você quer ser chamado?" autocomplete="name">
+        <button class="btn btn-navy" type="submit">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2.05 22l5.3-1.39a9.87 9.87 0 0 0 4.69 1.19h.01c5.45 0 9.89-4.44 9.89-9.9 0-2.64-1.03-5.13-2.9-7A9.82 9.82 0 0 0 12.04 2m0 18.01h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.23 8.23m4.52-6.16c-.25-.13-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.17.25-.64.8-.78.97-.14.16-.29.18-.54.06-.25-.13-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29"/></svg>
+          Garantir vaga pelo WhatsApp
+        </button>
+      </form>
+      <p class="alt">Ou chame direto: <a href="https://wa.me/5581973268686" target="_blank" rel="noopener">(81) 97326-8686</a></p>
+      <p class="note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+        INTEGRA · Recife/PE — encontro presencial
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     FOOTER
+     ====================================================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <b>Morib Macedo</b>
+        <span>Jornalista · Palestrante</span>
+      </div>
+      <img src="img/integra-cream-sm.png" alt="INTEGRA — A Nova Escola de Psicanálise"
+           width="64" height="64" loading="lazy" decoding="async">
+    </div>
+    <div class="foot-bottom">
+      <div class="foot-links">
+        <a href="https://www.instagram.com/palestrantemoribmacedo" target="_blank" rel="noopener">@palestrantemoribmacedo</a>
+        <a href="https://www.instagram.com/oratoriarecife" target="_blank" rel="noopener">@oratoriarecife</a>
+        <a href="https://wa.me/5581973268686" target="_blank" rel="noopener">(81) 97326-8686</a>
+      </div>
+      <small>Workshop de Comunicação Estratégica — Uma Nova Oratória para Liderar<br>
+      Realização INTEGRA — A Nova Escola de Psicanálise · © <span id="year"></span> Morib Macedo</small>
+    </div>
+  </div>
+</footer>
+
+<!-- ======================================================
+     WHATSAPP FLUTUANTE + BARRA FIXA MOBILE
+     (aparecem via JS depois que o visitante passa do hero)
+     ====================================================== -->
+<a class="wa-float" href="https://wa.me/5581973268686?text=Ol%C3%A1!%20Quero%20garantir%20minha%20vaga%20no%20Workshop%20de%20Comunica%C3%A7%C3%A3o%20Estrat%C3%A9gica%20%E2%80%93%20Uma%20Nova%20Orat%C3%B3ria%20para%20Liderar." target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <svg width="27" height="27" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2.05 22l5.3-1.39a9.87 9.87 0 0 0 4.69 1.19h.01c5.45 0 9.89-4.44 9.89-9.9 0-2.64-1.03-5.13-2.9-7A9.82 9.82 0 0 0 12.04 2m0 18.01h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.23 8.23m4.52-6.16c-.25-.13-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.17.25-.64.8-.78.97-.14.16-.29.18-.54.06-.25-.13-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29"/></svg>
+</a>
+
+<div class="sticky-cta">
+  <a class="btn btn-y" href="https://wa.me/5581973268686?text=Ol%C3%A1!%20Quero%20garantir%20minha%20vaga%20no%20Workshop%20de%20Comunica%C3%A7%C3%A3o%20Estrat%C3%A9gica%20%E2%80%93%20Uma%20Nova%20Orat%C3%B3ria%20para%20Liderar." target="_blank" rel="noopener">Garantir minha vaga</a>
+</div>
+
+</body>
+</html>

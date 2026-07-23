@@ -1,0 +1,604 @@
+/* ============================================================
+   WORKSHOP DE COMUNICAÇÃO ESTRATÉGICA — Morib Macedo
+   Folha de estilos principal
+   ------------------------------------------------------------
+   Índice:
+   01. Tokens de design (cores, fontes, sombras)
+   02. Reset e base
+   03. Utilitários (container, kicker, títulos)
+   04. Sistema de revelação no scroll (com stagger)
+   05. Botões
+   06. Barra de progresso de leitura
+   07. Header fixo (transparente → sólido, esconde ao rolar)
+   08. Hero (entrada cinematográfica + cartão de foto 3D)
+   09. Faixa de realização
+   10. Letreiro (marquee)
+   11. Apresentador (duotone que revela cor no hover)
+   12. Para quem é (lista editorial)
+   13. O método
+   14. INTEGRA
+   15. FAQ
+   16. CTA final (faixa amarela)
+   17. Footer
+   18. WhatsApp flutuante + barra fixa mobile
+   19. Keyframes
+   20. Performance e acessibilidade
+   ============================================================ */
+
+/* ---------- 01. TOKENS DE DESIGN ---------- */
+:root{
+  /* paleta — azul-marinho dominante, branco, amarelo de contraste */
+  --navy-950:#0b1029;
+  --navy-900:#10173a;
+  --navy-800:#151d44;
+  --navy-700:#1c2450;
+  --navy-500:#232e5c;
+  --ink:#141b3d;            /* texto principal em fundo claro */
+  --body:#4c5265;           /* texto de apoio */
+  --soft:#f4f6fa;           /* fundo de seção alternada */
+  --hair:#e6e8f0;           /* linhas finas em fundo claro */
+  --hair-d:rgba(255,255,255,.14); /* linhas finas em fundo escuro */
+  --yellow:#f6b92b;
+  --yellow-d:#d99d15;
+  --white:#ffffff;
+
+  /* tipografia */
+  --f-disp:'Inter Tight',Inter,system-ui,sans-serif; /* títulos */
+  --f-body:'Inter',system-ui,sans-serif;             /* texto corrido */
+  --f-accent:'Abril Fatface',Georgia,serif;          /* palavra "oratória" / números */
+
+  /* geometria e sombras */
+  --r:14px;
+  --shadow-lg:0 32px 64px -28px rgba(11,16,41,.4);
+  --shadow-md:0 18px 40px -22px rgba(11,16,41,.35);
+
+  /* curvas de animação — dão o "toque vivo" do site */
+  --ease-out:cubic-bezier(.16,1,.3,1);      /* desaceleração suave e elegante */
+  --ease-spring:cubic-bezier(.34,1.56,.64,1); /* leve "quique" nos hovers */
+}
+
+/* ---------- 02. RESET E BASE ---------- */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--white);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:16px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(246,185,43,.5);color:var(--navy-900)}
+section{scroll-margin-top:84px} /* âncoras não ficam escondidas sob o header */
+
+/* ---------- 03. UTILITÁRIOS ---------- */
+.wrap{width:min(1120px,calc(100% - 48px));margin-inline:auto}
+
+h1,h2,h3{font-family:var(--f-disp);letter-spacing:-.02em}
+h2{font-size:clamp(1.75rem,3.6vw,2.6rem);font-weight:800;line-height:1.12;color:var(--ink)}
+.lede{font-size:1.06rem;color:var(--body);max-width:60ch}
+
+/* rótulo de seção com quadradinho amarelo */
+.kicker{
+  display:flex;align-items:center;gap:.6rem;
+  font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--body);margin-bottom:1.1rem;
+}
+.kicker::before{content:"";width:10px;height:10px;background:var(--yellow);border-radius:2px;flex:none}
+
+/* cabeçalho de seção: título à esquerda, numeração à direita */
+.sec-top{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:end;margin-bottom:clamp(2.2rem,5vw,3.4rem)}
+.sec-top .lede{margin-top:.9rem}
+.sec-num{font-family:var(--f-accent);font-size:1.05rem;color:var(--yellow-d)}
+
+/* ---------- 04. SISTEMA DE REVELAÇÃO NO SCROLL ----------
+   .reveal entra com fade + deslize + leve desfoque.
+   Dentro de [data-stagger], o JS aplica --d (atraso) em cascata,
+   criando o efeito de "onda" ao rolar a página.                  */
+.reveal{
+  opacity:0;
+  transform:translateY(26px);
+  filter:blur(5px);
+  transition:
+    opacity .8s var(--ease-out) var(--d,0s),
+    transform .8s var(--ease-out) var(--d,0s),
+    filter .8s var(--ease-out) var(--d,0s);
+}
+.reveal.on{opacity:1;transform:none;filter:none}
+
+/* ---------- 05. BOTÕES ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
+  font-family:var(--f-disp);font-weight:700;font-size:.98rem;letter-spacing:-.01em;
+  padding:.95rem 1.7rem;border-radius:10px;cursor:pointer;border:none;
+  transition:transform .25s var(--ease-spring),box-shadow .25s ease,background .2s ease,border-color .2s ease,color .2s ease;
+  white-space:nowrap;
+}
+.btn svg{flex:none;transition:transform .25s var(--ease-spring)}
+.btn:hover svg{transform:scale(1.15) rotate(-6deg)}   /* ícone "acorda" no hover */
+.btn:active{transform:scale(.97)}                     /* clique com resposta tátil */
+
+.btn-y{background:var(--yellow);color:var(--navy-900);box-shadow:0 12px 28px -12px rgba(217,157,21,.55)}
+.btn-y:hover{background:#ffc844;transform:translateY(-3px);box-shadow:0 18px 36px -12px rgba(217,157,21,.65)}
+.btn-navy{background:var(--navy-900);color:#fff;box-shadow:0 12px 28px -14px rgba(11,16,41,.5)}
+.btn-navy:hover{background:var(--navy-700);transform:translateY(-3px)}
+.btn-ghost-w{border:1px solid rgba(255,255,255,.35);color:#fff;background:transparent}
+.btn-ghost-w:hover{border-color:#fff;background:rgba(255,255,255,.08);transform:translateY(-3px)}
+.btn-ghost{border:1px solid var(--hair);color:var(--ink);background:transparent}
+.btn-ghost:hover{border-color:var(--ink);transform:translateY(-3px)}
+
+/* ---------- 06. BARRA DE PROGRESSO DE LEITURA ----------
+   Linha amarela no topo que cresce conforme o scroll — dá
+   sensação de avanço e mantém o amarelo sempre presente.  */
+.progress{
+  position:fixed;top:0;left:0;right:0;height:3px;z-index:80;
+  background:var(--yellow);
+  transform-origin:0 50%;transform:scaleX(0);
+  pointer-events:none;
+}
+
+/* ---------- 07. HEADER ---------- */
+header{
+  position:fixed;inset:0 0 auto 0;z-index:60;
+  padding:1rem 0;
+  transition:background .35s ease,box-shadow .35s ease,padding .35s ease,transform .4s var(--ease-out);
+}
+/* esconde ao rolar para baixo, reaparece ao subir (controlado pelo JS) */
+header.hidden{transform:translateY(-110%)}
+header .nav{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.brand{display:flex;flex-direction:column;line-height:1.15}
+.brand b{font-family:var(--f-disp);font-weight:800;font-size:1.02rem;letter-spacing:.01em;color:#fff;transition:color .35s ease}
+.brand span{font-size:.64rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.55);transition:color .35s ease}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-phone{display:flex;flex-direction:column;line-height:1.25;text-align:right}
+.nav-phone small{font-size:.62rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.5);transition:color .35s ease}
+.nav-phone b{font-family:var(--f-disp);font-size:.92rem;font-weight:700;color:#fff;transition:color .35s ease}
+.nav .btn{padding:.7rem 1.25rem;font-size:.88rem}
+/* estado sólido (após rolar): fundo branco, textos escuros */
+header.solid{background:rgba(255,255,255,.96);backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--hair),0 12px 32px -24px rgba(11,16,41,.25);padding:.65rem 0}
+header.solid .brand b,header.solid .nav-phone b{color:var(--ink)}
+header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
+@media (max-width:640px){
+  .nav-phone{display:none}
+  .nav .btn{padding:.65rem 1rem;font-size:.8rem}
+}
+
+/* ---------- 08. HERO ---------- */
+.hero{
+  background:
+    radial-gradient(56% 60% at 82% 0%, rgba(35,46,92,.85), transparent 70%),
+    radial-gradient(40% 44% at 0% 100%, rgba(28,36,80,.6), transparent 70%),
+    var(--navy-900);
+  color:#fff;
+  padding:clamp(7.2rem,12vw,9.5rem) 0 clamp(3.4rem,6vw,5rem);
+  position:relative;overflow:hidden;
+}
+/* marca d'água ORATÓRIA — o JS aplica parallax sutil nela */
+.hero-mark{
+  position:absolute;bottom:-.14em;left:-.03em;
+  font-family:var(--f-accent);font-size:clamp(7rem,19vw,17rem);line-height:1;
+  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.05);
+  pointer-events:none;white-space:nowrap;user-select:none;
+  will-change:transform;
+}
+.hero-grid{
+  display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(2.4rem,6vw,4.5rem);
+  align-items:center;position:relative;z-index:1;
+}
+@media (max-width:920px){.hero-grid{grid-template-columns:1fr}}
+.hero .kicker{color:rgba(255,255,255,.65)}
+.hero h1{
+  font-size:clamp(2.5rem,5.6vw,4.15rem);
+  font-weight:800;line-height:1.04;letter-spacing:-.03em;color:#fff;
+}
+/* a palavra "oratória" em serifa dourada com brilho que varre
+   a cada 6s — chama o olho sem cansar */
+.hero h1 em{
+  font-family:var(--f-accent);font-style:normal;font-weight:400;
+  font-size:1.04em;letter-spacing:0;
+  background:linear-gradient(100deg,var(--yellow) 42%,#ffe9a8 50%,var(--yellow) 58%);
+  background-size:250% 100%;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  animation:glint 6s ease-in-out infinite;
+}
+.hero .lede{color:rgba(255,255,255,.72);margin-top:1.4rem}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2.1rem}
+.hero-meta{
+  display:grid;grid-template-columns:repeat(3,auto);gap:2.2rem;
+  border-top:1px solid var(--hair-d);
+  margin-top:2.6rem;padding-top:1.5rem;width:fit-content;
+}
+.hero-meta div{display:flex;flex-direction:column;gap:.15rem}
+.hero-meta small{font-size:.62rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.hero-meta b{font-family:var(--f-disp);font-size:.92rem;font-weight:700;color:#fff}
+@media (max-width:560px){.hero-meta{grid-template-columns:1fr 1fr;gap:1.1rem 2rem}}
+
+/* --- entrada cinematográfica do hero (classe .in adicionada no load) ---
+   Cada elemento sobe em sequência; a foto entra por último com leve giro. */
+.hero .kicker,.hero h1,.hero .lede,.hero-ctas,.hero-meta{
+  opacity:0;transform:translateY(30px);
+  transition:opacity .9s var(--ease-out),transform .9s var(--ease-out);
+}
+.hero.in .kicker{opacity:1;transform:none;transition-delay:.05s}
+.hero.in h1{opacity:1;transform:none;transition-delay:.15s}
+.hero.in .lede{opacity:1;transform:none;transition-delay:.3s}
+.hero.in .hero-ctas{opacity:1;transform:none;transition-delay:.42s}
+.hero.in .hero-meta{opacity:1;transform:none;transition-delay:.54s}
+.photo-card{
+  opacity:0;transform:translateY(40px) rotate(2.5deg) scale(.96);
+  transition:opacity 1s var(--ease-out) .35s,transform 1s var(--ease-out) .35s,box-shadow .3s ease;
+}
+.hero.in .photo-card{opacity:1;transform:none}
+
+/* --- cartão de foto (estilo polaroid) com tilt 3D no mouse --- */
+.photo-card{
+  background:#fff;border-radius:calc(var(--r) + 4px);
+  padding:12px 12px 0;box-shadow:var(--shadow-lg);
+  position:relative;max-width:400px;margin-left:auto;
+  transform-style:preserve-3d;will-change:transform;
+}
+@media (max-width:920px){.photo-card{margin:0 auto}}
+.photo-card::before{ /* moldura amarela deslocada atrás do cartão */
+  content:"";position:absolute;inset:-14px -14px 14px 14px;
+  border:2px solid var(--yellow);border-radius:calc(var(--r) + 8px);
+  z-index:-1;opacity:.9;
+  transition:inset .35s var(--ease-spring);
+}
+.photo-card:hover::before{inset:-18px -18px 18px 18px} /* a moldura "respira" */
+.photo-card .ph{
+  border-radius:var(--r) var(--r) 0 0;overflow:hidden;
+  aspect-ratio:4/5;background:var(--soft);
+}
+.photo-card .ph img{
+  width:100%;height:100%;object-fit:cover;object-position:50% 0;
+  transition:transform .6s var(--ease-out);
+}
+.photo-card:hover .ph img{transform:scale(1.04)} /* zoom sutil na foto */
+.photo-card figcaption{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.95rem .5rem 1rem;
+}
+.photo-card figcaption b{font-family:var(--f-disp);font-weight:800;font-size:1rem;color:var(--ink);display:block;line-height:1.2}
+.photo-card figcaption small{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--body)}
+.photo-card .ig{
+  width:38px;height:38px;border-radius:10px;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--soft);
+  transition:background .2s ease,transform .25s var(--ease-spring);
+}
+.photo-card .ig:hover{background:#e9ecf4;transform:scale(1.12) rotate(6deg)}
+
+/* ---------- 09. FAIXA REALIZAÇÃO ---------- */
+.strip{border-bottom:1px solid var(--hair);background:#fff}
+.strip .wrap{
+  display:flex;align-items:center;justify-content:space-between;gap:1.4rem;
+  padding:1.05rem 0;flex-wrap:wrap;
+}
+.strip-left{display:flex;align-items:center;gap:.9rem}
+.strip-left img{width:44px;height:44px;object-fit:contain}
+.strip-left small{display:block;font-size:.6rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--body)}
+.strip-left b{font-family:var(--f-disp);font-size:.95rem;font-weight:700;color:var(--ink)}
+.strip-right{display:flex;align-items:center;gap:1.8rem;font-size:.85rem;font-weight:600;color:var(--body)}
+.strip-right a{position:relative}
+.strip-right a::after{ /* sublinhado amarelo que desliza no hover */
+  content:"";position:absolute;left:0;bottom:-3px;height:2px;width:100%;
+  background:var(--yellow);transform:scaleX(0);transform-origin:right;
+  transition:transform .3s var(--ease-out);
+}
+.strip-right a:hover{color:var(--ink)}
+.strip-right a:hover::after{transform:scaleX(1);transform-origin:left}
+@media (max-width:720px){.strip-right{display:none}}
+
+/* ---------- 10. LETREIRO (MARQUEE) ----------
+   Movimento contínuo e lento entre seções — dá vida sem gritar.
+   Pausa no hover. */
+.marquee{
+  border-block:1px solid var(--hair);
+  overflow:hidden;padding:.9rem 0;background:#fff;
+}
+.marquee-track{
+  display:flex;gap:3.2rem;width:max-content;
+  animation:marquee 36s linear infinite;
+}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee span{
+  display:flex;align-items:center;gap:3.2rem;flex:none;
+  font-family:var(--f-disp);font-weight:700;font-size:.8rem;
+  letter-spacing:.28em;text-transform:uppercase;color:var(--ink);
+  white-space:nowrap;
+}
+.marquee i{font-style:normal;color:var(--yellow-d)}
+
+/* ---------- 11. APRESENTADOR ---------- */
+.section{padding:clamp(4.2rem,8.5vw,6.8rem) 0}
+.spk{display:grid;grid-template-columns:.88fr 1.12fr;gap:clamp(2.6rem,6vw,5rem);align-items:center}
+@media (max-width:900px){.spk{grid-template-columns:1fr}}
+.spk-visual{position:relative}
+/* duotone azul: foto em p&b + camada azul por cima.
+   No hover, a cor real da foto é revelada — pequeno momento "uau". */
+.spk-visual .frame{
+  border-radius:calc(var(--r) + 4px);overflow:hidden;
+  aspect-ratio:4/5;position:relative;
+  box-shadow:var(--shadow-md);
+  background:var(--navy-800);
+}
+.spk-visual .frame img{
+  width:100%;height:100%;object-fit:cover;object-position:50% 0;
+  filter:grayscale(1) contrast(1.05);
+  transition:filter .7s ease,transform .7s var(--ease-out);
+}
+.spk-visual .frame::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(200deg,rgba(16,23,58,.32) 30%,rgba(16,23,58,.75));
+  mix-blend-mode:multiply;
+  transition:opacity .7s ease;
+}
+.spk-visual .frame:hover img{filter:grayscale(0) contrast(1);transform:scale(1.03)}
+.spk-visual .frame:hover::after{opacity:.25}
+.spk-visual .tag{
+  position:absolute;left:1.1rem;bottom:1.1rem;z-index:2;
+  background:var(--yellow);color:var(--navy-900);
+  font-family:var(--f-disp);font-weight:700;font-size:.8rem;letter-spacing:.02em;
+  padding:.5rem .85rem;border-radius:8px;
+  box-shadow:0 10px 24px -10px rgba(11,16,41,.45);
+}
+.spk h2{max-width:17ch}
+.spk p{color:var(--body);margin-top:1.15rem;max-width:58ch}
+.spk p b{color:var(--ink);font-weight:600}
+.spk-meta{border-top:1px solid var(--hair);margin-top:1.8rem}
+.spk-meta div{
+  display:flex;justify-content:space-between;gap:1.5rem;align-items:baseline;
+  padding:.8rem 0;border-bottom:1px solid var(--hair);
+  transition:padding-left .3s var(--ease-out);
+}
+.spk-meta div:hover{padding-left:.5rem} /* micro-resposta ao passar o mouse */
+.spk-meta small{font-size:.66rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--body);flex:none}
+.spk-meta b{font-family:var(--f-disp);font-size:.94rem;font-weight:700;color:var(--ink);text-align:right}
+.spk-meta a b{border-bottom:2px solid var(--yellow)}
+.spk-ctas{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:1.9rem}
+
+/* ---------- 12. PARA QUEM É ---------- */
+.soft-bg{background:var(--soft)}
+.aud{list-style:none;border-top:1px solid var(--hair)}
+.aud li{
+  display:grid;grid-template-columns:64px 1fr auto;gap:1.5rem;align-items:baseline;
+  padding:1.35rem 0;border-bottom:1px solid var(--hair);
+  transition:padding-left .35s var(--ease-out),background .35s ease;
+  position:relative;
+}
+/* hover: a linha desliza e ganha um traço amarelo à esquerda */
+.aud li::before{
+  content:"";position:absolute;left:0;top:20%;bottom:20%;width:3px;
+  background:var(--yellow);border-radius:2px;
+  transform:scaleY(0);transition:transform .35s var(--ease-out);
+}
+.aud li:hover{padding-left:1.1rem}
+.aud li:hover::before{transform:scaleY(1)}
+.aud .n{font-family:var(--f-accent);font-size:1rem;color:var(--yellow-d)}
+.aud h3{font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:800;color:var(--ink)}
+.aud p{color:var(--body);font-size:.95rem;text-align:right;max-width:36ch}
+@media (max-width:700px){
+  .aud li{grid-template-columns:44px 1fr}
+  .aud p{grid-column:2;text-align:left;max-width:none;margin-top:.2rem}
+}
+
+/* ---------- 13. O MÉTODO ---------- */
+.chg{display:grid;grid-template-columns:repeat(3,1fr);gap:2.4rem 2.6rem}
+@media (max-width:940px){.chg{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.chg{grid-template-columns:1fr}}
+.chg article{position:relative;padding-top:1.1rem}
+/* a régua superior de cada item "desenha" da esquerda p/ direita ao revelar */
+.chg article::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--ink);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .9s var(--ease-out) calc(var(--d,0s) + .15s);
+}
+.chg article.on::before{transform:scaleX(1)}
+.chg article:hover::before{background:var(--yellow);transition-duration:.3s}
+.chg .n{font-family:var(--f-accent);font-size:.95rem;color:var(--yellow-d)}
+.chg h3{font-size:1.06rem;font-weight:800;margin:.55rem 0 .35rem;color:var(--ink);letter-spacing:-.01em}
+.chg p{font-size:.92rem;color:var(--body)}
+.chg-foot{
+  display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;
+  margin-top:clamp(2.6rem,5vw,3.4rem);padding-top:1.6rem;border-top:1px solid var(--hair);
+}
+.chg-foot small{color:var(--body);font-size:.88rem}
+
+/* ---------- 14. INTEGRA ---------- */
+.integra{background:var(--navy-900);color:#fff;position:relative;overflow:hidden}
+.integra::before{ /* símbolo gigante da escola como marca d'água */
+  content:"";position:absolute;right:-12%;top:50%;transform:translateY(-50%);
+  width:min(560px,60vw);aspect-ratio:1;
+  background:url("../img/integra-cream.png") center/contain no-repeat;
+  opacity:.06;pointer-events:none;
+}
+.int-grid{display:grid;grid-template-columns:auto 1fr;gap:clamp(2.6rem,7vw,5.5rem);align-items:center;position:relative;z-index:1}
+@media (max-width:860px){.int-grid{grid-template-columns:1fr}}
+/* logo dentro de anel que gira lentíssimo — vida sem distração */
+.int-logo{
+  width:clamp(180px,22vw,240px);aspect-ratio:1;border-radius:50%;
+  border:1px solid rgba(255,255,255,.18);
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(60% 60% at 50% 42%, rgba(246,185,43,.1), transparent 72%);
+  position:relative;
+}
+.int-logo::after{ /* anel pontilhado externo em rotação */
+  content:"";position:absolute;inset:-12px;border-radius:50%;
+  border:1px dashed rgba(246,185,43,.35);
+  animation:spin 60s linear infinite;
+}
+.int-logo img{width:82%;height:82%;object-fit:contain}
+.integra .kicker{color:rgba(255,255,255,.6)}
+.integra h2{color:#fff;max-width:20ch}
+.integra .lede{color:rgba(255,255,255,.7);margin-top:1.15rem}
+.int-info{
+  display:grid;grid-template-columns:repeat(2,minmax(0,260px));gap:0 2.5rem;
+  border-top:1px solid var(--hair-d);margin-top:1.9rem;
+}
+@media (max-width:560px){.int-info{grid-template-columns:1fr}}
+.int-info div{
+  display:flex;justify-content:space-between;gap:1rem;align-items:baseline;
+  padding:.75rem 0;border-bottom:1px solid var(--hair-d);
+}
+.int-info small{font-size:.64rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.int-info b{font-family:var(--f-disp);font-size:.9rem;font-weight:700;color:#fff}
+
+/* ---------- 15. FAQ ---------- */
+.faq{max-width:720px}
+.faq details{border-bottom:1px solid var(--hair)}
+.faq details:first-of-type{border-top:1px solid var(--hair)}
+.faq summary{
+  cursor:pointer;list-style:none;
+  display:flex;justify-content:space-between;align-items:center;gap:1.2rem;
+  padding:1.2rem 0;
+  font-family:var(--f-disp);font-weight:700;font-size:1.02rem;color:var(--ink);
+  transition:color .2s ease;
+}
+.faq summary:hover{color:var(--navy-500)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary svg{flex:none;transition:transform .35s var(--ease-spring);color:var(--body)}
+.faq details[open] summary svg{transform:rotate(45deg);color:var(--yellow-d)}
+/* resposta entra com fade + deslize ao abrir */
+.faq .ans{
+  padding:0 0 1.3rem;color:var(--body);font-size:.95rem;max-width:60ch;
+}
+.faq details[open] .ans{animation:faqOpen .45s var(--ease-out)}
+.faq .ans a{font-weight:700;color:var(--ink);border-bottom:2px solid var(--yellow)}
+
+/* ---------- 16. CTA FINAL ---------- */
+.cta{background:var(--yellow);position:relative;overflow:hidden}
+.cta::before{ /* brilho radial que se move devagar — faixa nunca fica "morta" */
+  content:"";position:absolute;inset:-40%;
+  background:radial-gradient(38% 38% at 50% 50%, rgba(255,255,255,.35), transparent 70%);
+  animation:drift 14s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+.cta .wrap{
+  display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2.4rem,6vw,4.5rem);
+  align-items:center;padding-block:clamp(3.6rem,7vw,5.5rem);
+  position:relative;z-index:1;
+}
+@media (max-width:880px){.cta .wrap{grid-template-columns:1fr}}
+.cta .kicker{color:rgba(16,23,58,.6)}
+.cta .kicker::before{background:var(--navy-900)}
+.cta h2{color:var(--navy-900);letter-spacing:-.03em;font-size:clamp(1.9rem,4.2vw,3rem);max-width:16ch}
+.cta p{color:rgba(16,23,58,.72);margin-top:1rem;max-width:46ch;font-size:1rem}
+.cta-box{
+  background:#fff;border-radius:calc(var(--r) + 4px);
+  padding:clamp(1.6rem,3.5vw,2.2rem);
+  box-shadow:0 28px 60px -30px rgba(11,16,41,.45);
+  transition:transform .35s var(--ease-out),box-shadow .35s ease;
+}
+.cta-box:hover{transform:translateY(-4px);box-shadow:0 36px 70px -30px rgba(11,16,41,.5)}
+.cta-box label{
+  display:block;font-size:.7rem;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--body);margin-bottom:.5rem;
+}
+.cta-box input{
+  width:100%;
+  border:1px solid var(--hair);border-radius:10px;
+  padding:.95rem 1.1rem;font-family:var(--f-body);font-size:1rem;color:var(--ink);
+  outline:none;transition:border-color .2s ease,box-shadow .2s ease;
+  margin-bottom:1rem;background:#fff;
+}
+.cta-box input::placeholder{color:#9aa1b5}
+.cta-box input:focus{border-color:var(--navy-500);box-shadow:0 0 0 3px rgba(35,46,92,.12)}
+.cta-box .btn{width:100%}
+.cta-box .alt{text-align:center;margin-top:1rem;font-size:.85rem;color:var(--body)}
+.cta-box .alt a{font-weight:700;color:var(--ink);border-bottom:2px solid var(--yellow)}
+.cta-box .note{
+  display:flex;align-items:center;justify-content:center;gap:.45rem;
+  margin-top:1.1rem;font-size:.76rem;color:var(--body);
+}
+
+/* ---------- 17. FOOTER ---------- */
+footer{background:var(--navy-950);color:#fff;padding:3.4rem 0 7.5rem}
+.foot-top{display:flex;align-items:center;justify-content:space-between;gap:1.6rem;flex-wrap:wrap}
+.foot-brand{display:flex;flex-direction:column;line-height:1.2}
+.foot-brand b{font-family:var(--f-disp);font-weight:800;font-size:1.5rem;letter-spacing:-.02em}
+.foot-brand span{font-size:.66rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.foot-top img{width:64px;height:64px;object-fit:contain;opacity:.9}
+.foot-bottom{
+  display:flex;align-items:center;justify-content:space-between;gap:1.4rem;flex-wrap:wrap;
+  border-top:1px solid var(--hair-d);margin-top:2rem;padding-top:1.6rem;
+}
+.foot-links{display:flex;flex-wrap:wrap;gap:1.6rem;font-size:.85rem;font-weight:600}
+.foot-links a{color:rgba(255,255,255,.65);transition:color .2s ease,transform .2s ease;display:inline-block}
+.foot-links a:hover{color:var(--yellow);transform:translateY(-2px)}
+footer small{color:rgba(255,255,255,.4);font-size:.76rem;line-height:1.7}
+
+/* ---------- 18. WHATSAPP FLUTUANTE + BARRA MOBILE ---------- */
+.wa-float{
+  position:fixed;right:1.15rem;bottom:1.15rem;z-index:70;
+  width:54px;height:54px;border-radius:50%;
+  background:#25d366;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 12px 28px -8px rgba(37,211,102,.55);
+  transition:transform .3s var(--ease-spring),opacity .4s ease;
+  opacity:0;transform:scale(.5);pointer-events:none; /* aparece após rolar (JS) */
+}
+.wa-float.show{opacity:1;transform:scale(1);pointer-events:auto}
+.wa-float:hover{transform:scale(1.1)}
+.wa-float::after{ /* anel de "ping" a cada 4s puxando o olhar */
+  content:"";position:absolute;inset:0;border-radius:50%;
+  border:2px solid #25d366;
+  animation:ping 4s ease-out infinite;
+}
+.sticky-cta{
+  position:fixed;inset:auto 0 0 0;z-index:65;
+  padding:.7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
+  background:rgba(255,255,255,.97);backdrop-filter:blur(10px);
+  border-top:1px solid var(--hair);
+  display:none;
+  transform:translateY(110%);transition:transform .45s var(--ease-out);
+}
+.sticky-cta.show{transform:none}
+.sticky-cta .btn{width:100%}
+@media (max-width:720px){
+  .sticky-cta{display:block}
+  .wa-float{bottom:4.9rem}
+  footer{padding-bottom:8.5rem}
+}
+
+/* ---------- 19. KEYFRAMES ---------- */
+@keyframes glint{          /* brilho que varre a palavra "oratória" */
+  0%,72%{background-position:115% 0}
+  88%,100%{background-position:-15% 0}
+}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes ping{           /* anel expandindo no botão de WhatsApp */
+  0%{transform:scale(1);opacity:.7}
+  70%,100%{transform:scale(1.7);opacity:0}
+}
+@keyframes drift{          /* brilho vagando pela faixa amarela */
+  from{transform:translate(-6%,-4%)}
+  to{transform:translate(6%,4%)}
+}
+@keyframes faqOpen{        /* resposta do FAQ surgindo */
+  from{opacity:0;transform:translateY(-6px)}
+  to{opacity:1;transform:none}
+}
+
+/* ---------- 20. PERFORMANCE E ACESSIBILIDADE ---------- */
+/* seções abaixo da dobra só são renderizadas quando se aproximam
+   da viewport — ganho real de tempo de primeira pintura */
+#publico,#metodo,#integra,#faq,.cta,footer{
+  content-visibility:auto;
+  contain-intrinsic-size:auto 640px;
+}
+/* respeita quem prefere menos movimento */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+  .reveal,.hero .kicker,.hero h1,.hero .lede,.hero-ctas,.hero-meta,.photo-card{
+    opacity:1!important;transform:none!important;filter:none!important;
+  }
+}
