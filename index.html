@@ -50,15 +50,43 @@
      Failsafe no CSS/JS garante que nunca fica preso.
      ====================================================== -->
 <div id="preloader" aria-hidden="true">
+  <div class="pre-sheen"></div>
   <span class="pre-word">ORATÓRIA</span>
-  <div class="pre-inner">
-    <span class="pre-mark">M</span>
-    <span class="pre-name">Morib Macedo</span>
-    <span class="pre-role">Jornalista · Palestrante</span>
-    <div class="pre-bar"><span class="pre-fill"></span></div>
-    <span class="pre-pct">0%</span>
+
+  <!-- marca ao centro (logo entra em img/morib-logo.png quando enviada) -->
+  <div class="pre-stage">
+    <div class="pre-brand" id="preBrand">
+      <span class="pre-mark">M</span>
+      <img class="pre-logo" src="img/morib-logo.png" alt="Morib Macedo"
+           onload="document.getElementById('preBrand').classList.add('has-logo')"
+           onerror="this.remove()">
+      <span class="pre-name">Morib Macedo</span>
+    </div>
+    <span class="pre-cycle" id="preCycle">Comunicação</span>
   </div>
+
+  <!-- rodapé editorial: status + número gigante -->
+  <div class="pre-foot">
+    <span class="pre-status">Preparando sua experiência</span>
+    <span class="pre-count"><b id="preNum">0</b><i>%</i></span>
+  </div>
+
+  <!-- linha de progresso de ponta a ponta -->
+  <div class="pre-track"><span class="pre-fill"></span></div>
 </div>
+<!-- rede de segurança independente: se o main.js falhar, some em 6s
+     e ainda assim revela o hero (evita tela presa/hero invisível) -->
+<script>
+  setTimeout(function () {
+    document.body.classList.remove('loading');
+    var h = document.querySelector('.hero'); if (h) h.classList.add('in');
+    var p = document.getElementById('preloader');
+    if (!p) return;
+    p.style.transition = 'opacity .4s ease';
+    p.style.opacity = '0';
+    setTimeout(function () { if (p) p.remove(); }, 450);
+  }, 6000);
+</script>
 
 <!-- barra de progresso de leitura (preenchida pelo JS) -->
 <div class="progress" aria-hidden="true"></div>

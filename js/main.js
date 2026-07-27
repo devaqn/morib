@@ -78,19 +78,39 @@ if (heroTitle && !reduceMotion) splitHeroTitle(heroTitle);
    de carregar (window load), com tempo mínimo de exibição e um
    teto de segurança para nunca prender a tela. */
 const hero = $('.hero');
-function startHero() { hero && hero.classList.add('in'); }
+function startHero() {
+  if (!hero) return;
+  hero.classList.add('in');
+  // após a entrada das palavras, libera o overflow para os acentos
+  // (á, ó, ã) não ficarem cortados no topo da máscara
+  setTimeout(() => hero.classList.add('revealed'), 1500);
+}
 
 const preloader = $('#preloader');
 if (preloader) {
   const fill  = $('.pre-fill', preloader);
-  const pctEl = $('.pre-pct', preloader);
-  const setBar = v => { fill.style.width = v + '%'; if (pctEl) pctEl.textContent = Math.round(v) + '%'; };
+  const numEl = $('#preNum');
+  const setBar = v => { fill.style.width = v + '%'; if (numEl) numEl.textContent = Math.round(v); };
+
+  // palavra-chave que cicla enquanto carrega (Comunicação → Presença → …)
+  const cycleEl = $('#preCycle');
+  let cycleTimer = 0;
+  if (cycleEl && !reduceMotion) {
+    const words = ['Comunicação', 'Presença', 'Persuasão', 'Liderança', 'Oratória'];
+    let ci = 0;
+    cycleTimer = setInterval(() => {
+      ci = (ci + 1) % words.length;
+      cycleEl.classList.add('swap');
+      setTimeout(() => { cycleEl.textContent = words[ci]; cycleEl.classList.remove('swap'); }, 300);
+    }, 950);
+  }
 
   let p = 0, loaded = false, ended = false;
   const started = performance.now();
 
   function finish() {
     if (ended) return; ended = true;
+    clearInterval(cycleTimer);
     setBar(100);
     preloader.classList.add('done');
     document.body.classList.remove('loading');

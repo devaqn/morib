@@ -166,41 +166,84 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 }
 
 /* ---------- 07b. PRELOADER (tela de carregamento) ----------
-   Cobre a tela no carregamento e sai numa cortina para cima.
-   O JS preenche a barra e remove o elemento; se o JS falhar,
-   a animação "preFail" esconde tudo em 7s (nunca prende o site). */
+   Layout editorial: marca ao centro, número gigante contando
+   0→100, palavra-chave que cicla e linha de progresso de ponta
+   a ponta. Sai em cortina (conteúdo some, depois a tela sobe).
+   O JS conduz; a animação "preFail" é rede de segurança (7s). */
 #preloader{
-  position:fixed;inset:0;z-index:200;
-  display:grid;place-items:center;overflow:hidden;
+  position:fixed;inset:0;z-index:200;overflow:hidden;color:#fff;
   background:
-    radial-gradient(60% 60% at 50% 38%, rgba(35,46,92,.7), transparent 70%),
-    var(--navy-900);
-  transition:transform .85s var(--ease-out);
+    radial-gradient(75% 55% at 50% 42%, rgba(35,46,92,.72), transparent 72%),
+    var(--navy-950);
+  transition:transform .8s var(--ease-out) .28s;   /* espera o conteúdo sair */
   will-change:transform;
-  animation:preFail 0s linear 7s forwards; /* rede de segurança sem JS */
 }
-#preloader.done{transform:translateY(-101%)} /* cortina para cima */
-.pre-word{ /* eco gigante e sutil do hero, ao fundo */
-  position:absolute;left:50%;bottom:5%;transform:translateX(-50%);
-  font-family:var(--f-accent);font-size:clamp(4rem,16vw,12rem);line-height:1;
-  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.05);
-  white-space:nowrap;pointer-events:none;user-select:none;
+#preloader.done{transform:translateY(-101%)}       /* cortina para cima */
+
+/* varredura de luz diagonal, bem sutil */
+.pre-sheen{
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.05) 50%,transparent 58%);
+  transform:translateX(-120%);
+  animation:preSheen 3.4s ease-in-out infinite;
 }
-.pre-inner{
-  position:relative;z-index:1;
-  display:flex;flex-direction:column;align-items:center;
-  animation:preIn .7s var(--ease-out) both;
+
+/* eco gigante de ORATÓRIA ao fundo */
+.pre-word{
+  position:absolute;left:50%;bottom:-1%;transform:translateX(-50%);
+  font-family:var(--f-accent);font-size:clamp(5rem,22vw,17rem);line-height:1;
+  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.045);
+  white-space:nowrap;pointer-events:none;user-select:none;z-index:1;
 }
-.pre-mark{ /* monograma dourado com brilho pulsante */
-  font-family:var(--f-accent);font-size:clamp(3.4rem,9vw,5rem);line-height:1;
-  color:var(--yellow);text-shadow:0 8px 44px rgba(246,185,43,.4);
-  animation:preGlow 2.4s ease-in-out infinite;
+
+/* marca central */
+.pre-stage{
+  position:absolute;inset:0;z-index:2;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;
 }
-.pre-name{margin-top:.9rem;font-family:var(--f-disp);font-weight:800;letter-spacing:.26em;font-size:.92rem;color:#fff;text-transform:uppercase}
-.pre-role{margin-top:.4rem;font-size:.64rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.5)}
-.pre-bar{margin-top:1.9rem;width:220px;max-width:62vw;height:3px;border-radius:3px;background:rgba(255,255,255,.14);overflow:hidden}
-.pre-fill{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--yellow-d),var(--yellow));border-radius:3px}
-.pre-pct{margin-top:.75rem;font-family:var(--f-disp);font-size:.72rem;font-weight:700;letter-spacing:.14em;color:rgba(255,255,255,.55)}
+.pre-brand{display:flex;flex-direction:column;align-items:center;animation:preIn .85s var(--ease-out) both}
+.pre-mark{
+  font-family:var(--f-accent);font-size:clamp(3.6rem,10vw,5.4rem);line-height:1;
+  color:var(--yellow);text-shadow:0 10px 50px rgba(246,185,43,.4);
+}
+.pre-logo{display:none;max-height:clamp(72px,12vw,116px);width:auto;filter:drop-shadow(0 10px 40px rgba(0,0,0,.4))}
+.pre-brand.has-logo .pre-mark{display:none}
+.pre-brand.has-logo .pre-logo{display:block}
+.pre-name{margin-top:.85rem;font-family:var(--f-disp);font-weight:800;letter-spacing:.3em;font-size:.95rem;color:#fff;text-transform:uppercase}
+.pre-brand.has-logo .pre-name{display:none}     /* logo já traz o nome */
+/* palavra-chave que troca (JS): Comunicação → Presença → … */
+.pre-cycle{
+  position:relative;
+  font-family:var(--f-disp);font-size:.72rem;font-weight:700;letter-spacing:.36em;
+  text-transform:uppercase;color:var(--yellow);min-height:1.1em;
+  animation:preIn .85s var(--ease-out) .15s both;
+  transition:opacity .3s ease,transform .3s ease;
+}
+.pre-cycle.swap{opacity:0;transform:translateY(6px)}   /* estado durante a troca */
+
+/* rodapé editorial: status à esquerda, número gigante à direita */
+.pre-foot{
+  position:absolute;left:0;right:0;bottom:calc(clamp(1.4rem,4vw,2.4rem) + 2px);z-index:2;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding-inline:clamp(1.4rem,5vw,3.6rem);
+  animation:preIn .85s var(--ease-out) .3s both;
+}
+.pre-status{font-size:.64rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.5);padding-bottom:.6rem}
+.pre-count{display:flex;align-items:flex-start;gap:.08em;font-family:var(--f-accent);color:#fff;line-height:.82}
+.pre-count b{font-weight:400;font-size:clamp(2.8rem,10vw,5.2rem);font-variant-numeric:tabular-nums}
+.pre-count i{font-style:normal;font-size:clamp(1rem,2.6vw,1.5rem);color:var(--yellow);margin-top:.35em}
+
+/* linha de progresso de ponta a ponta (no rodapé absoluto da tela) */
+.pre-track{position:absolute;left:0;right:0;bottom:0;height:2px;background:rgba(255,255,255,.1);z-index:2}
+.pre-fill{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--yellow-d),var(--yellow));box-shadow:0 0 16px 1px rgba(246,185,43,.55)}
+
+/* saída em cascata do conteúdo, antes da cortina subir */
+#preloader.done .pre-brand,
+#preloader.done .pre-cycle,
+#preloader.done .pre-foot{
+  opacity:0;transform:translateY(-14px);
+  transition:opacity .35s ease,transform .45s var(--ease-out);
+}
 
 /* ---------- 08. HERO ---------- */
 .hero{
@@ -713,12 +756,15 @@ footer small{color:rgba(255,255,255,.4);font-size:.76rem;line-height:1.7}
 /* --- título do hero revelado palavra por palavra ---
    Cada palavra vive numa "janela" (overflow hidden) e sobe para
    dentro. O JS monta esses spans e libera com um atraso por palavra. */
-.hero h1 .word{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.05em}
+.hero h1 .word{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em}
 .hero h1 .word-in{
-  display:inline-block;transform:translateY(115%);
+  display:inline-block;transform:translateY(120%);
   transition:transform .9s var(--ease-out) var(--wd,0s);
 }
 .hero.in h1 .word-in{transform:none}
+/* terminada a entrada, libera o overflow: acentos e descendentes
+   (á, ó, ã, ç, p, q) aparecem inteiros, sem corte no topo/base */
+.hero.revealed h1 .word{overflow:visible}
 
 /* --- variações direcionais de revelação ---
    .reveal base = sobe + desfoca. Estas classes (aplicadas pelo JS)
@@ -785,12 +831,9 @@ footer small{color:rgba(255,255,255,.4);font-size:.76rem;line-height:1.7}
   from{opacity:0;transform:translateY(14px)}
   to{opacity:1;transform:none}
 }
-@keyframes preGlow{        /* brilho pulsante do monograma */
-  0%,100%{opacity:.85;transform:scale(1)}
-  50%{opacity:1;transform:scale(1.05)}
-}
-@keyframes preFail{        /* rede de segurança: esconde se o JS falhar */
-  to{opacity:0;visibility:hidden;pointer-events:none}
+@keyframes preSheen{       /* varredura de luz diagonal no preloader */
+  0%{transform:translateX(-120%)}
+  55%,100%{transform:translateX(120%)}
 }
 
 /* ---------- 20. PERFORMANCE E ACESSIBILIDADE ---------- */
