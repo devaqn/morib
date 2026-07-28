@@ -594,6 +594,17 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   .spk-meta b, .int-info b{text-align:left;max-width:100%}
   .spk-meta div:hover, .int-info div:hover{padding-left:0}
 }
+
+/* MOBILE: remove os limites de largura em "ch" (unidade aproximada,
+   baseada no glifo "0" da fonte) de títulos/parágrafos. Em alguns
+   navegadores/Android, o arredondamento dessa medida some 1-2px e a
+   ÚLTIMA LETRA da linha é cortada (ex.: "instrumento" -> "instrument")
+   em vez de quebrar para a linha seguinte. No mobile a própria coluna
+   já limita a largura, então o "ch" é desnecessário e removê-lo
+   elimina essa classe inteira de corte. */
+@media (max-width:640px){
+  .spk h2,.integra h2,.cta h2,.lede,.spk p,.aud p,.faq .ans,.gal-cap{max-width:none}
+}
 /* selo "parceria oficial" — dá peso à INTEGRA como corealizadora */
 .int-badge{
   display:inline-flex;align-items:center;gap:.5rem;
