@@ -30,6 +30,14 @@
      Quando carrega, o JS adiciona .has-logo e a logo aparece. */
   #preloader .pre-brand:not(.has-logo) .pre-logo{display:none}
 </style>
+<!-- JavaScript desligado: mostra todo o conteúdo, sem preloader nem scroll travado -->
+<noscript><style>
+  #preloader{display:none!important}
+  body.loading{overflow:auto!important}
+  .reveal,.hero .kicker,.hero h1,.hero .lede,.hero-ctas,.hero-meta,.photo-card{
+    opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important;
+  }
+</style></noscript>
 
 <!-- ======================================================
      PERFORMANCE
@@ -85,6 +93,9 @@
   setTimeout(function () {
     document.body.classList.remove('loading');
     var h = document.querySelector('.hero'); if (h) h.classList.add('in');
+    // revela qualquer conteúdo que ainda não apareceu (se o main.js falhou)
+    var r = document.querySelectorAll('.reveal');
+    for (var i = 0; i < r.length; i++) r[i].classList.add('on');
     var p = document.getElementById('preloader');
     if (!p) return;
     p.style.transition = 'opacity .4s ease';

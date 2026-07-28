@@ -252,12 +252,24 @@ $$('[data-stagger]').forEach(group => {
   });
 });
 
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
-  });
-}, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-$$('.reveal').forEach(el => io.observe(el));
+const revealEls = $$('.reveal');
+const revealAll = () => revealEls.forEach(el => el.classList.add('on'));
+
+if ('IntersectionObserver' in window) {
+  let ioFired = false; // vira true assim que o observer reporta algo
+  const io = new IntersectionObserver(entries => {
+    ioFired = true;
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  revealEls.forEach(el => io.observe(el));
+  // Rede de segurança: se o observer não reportar NADA em 2,5s (contexto sem
+  // renderização ou IO com problema), revela tudo — conteúdo nunca fica invisível.
+  setTimeout(() => { if (!ioFired) revealAll(); }, 2500);
+} else {
+  revealAll(); // navegador sem IntersectionObserver: mostra tudo de imediato
+}
 
 /* ---------- 06. BOTÕES MAGNÉTICOS ----------
    Os CTAs principais "puxam" levemente na direção do cursor, e o
