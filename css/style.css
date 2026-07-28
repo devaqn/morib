@@ -411,14 +411,18 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 /* ---------- 10. LETREIRO (MARQUEE) ----------
    Movimento contínuo e lento entre seções — dá vida sem gritar.
    Pausa no hover. */
+/* Altura fixa + faixa do letreiro. O track é posicionado de forma ABSOLUTA
+   (fora do fluxo) — assim sua largura enorme (max-content) NUNCA empurra a
+   largura da página, em navegador nenhum (corrige o corte/listra no iOS,
+   onde o overflow:hidden sozinho não segurava o filho animado). */
 .marquee{
-  border-block:1px solid var(--hair);
-  overflow:hidden;padding:.9rem 0;background:#fff;
-  contain:paint;                 /* garante o clip do letreiro animado no iOS */
-  -webkit-transform:translateZ(0); /* cria camada de composição que clipa de fato */
+  position:relative;overflow:hidden;
+  height:2.9rem;border-block:1px solid var(--hair);background:#fff;
+  contain:layout paint; /* isola totalmente o layout interno */
 }
 .marquee-track{
-  display:flex;gap:3.2rem;width:max-content;
+  position:absolute;top:0;left:0;height:100%;
+  display:flex;align-items:center;gap:3.2rem;width:max-content;
   animation:marquee 36s linear infinite;
 }
 .marquee:hover .marquee-track{animation-play-state:paused}
