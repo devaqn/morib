@@ -51,9 +51,11 @@
 <link rel="preload" as="image" href="img/morib-hero.jpg" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:wght@400;600;700&family=Abril+Fatface&display=swap" rel="stylesheet">
 
-<!-- estilos e script (defer = baixa em paralelo, executa após o parse) -->
-<link rel="stylesheet" href="css/style.css">
-<script src="js/main.js" defer></script>
+<!-- estilos e script (defer = baixa em paralelo, executa após o parse)
+     ?v=2 = "cache-busting": força o navegador a baixar a versão nova,
+     evitando que o Safari sirva CSS/JS antigos do cache -->
+<link rel="stylesheet" href="css/style.css?v=2">
+<script src="js/main.js?v=2" defer></script>
 </head>
 <body class="loading">
 
