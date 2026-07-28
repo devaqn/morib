@@ -65,7 +65,12 @@
    (bug do Safari) deixava rolar de lado e mostrava uma listra branca. */
 html{
   scroll-behavior:smooth;overflow-x:hidden;
-  -webkit-text-size-adjust:100%;text-size-adjust:100%; /* iOS não reescala o texto */
+  /* "none" (não "100%") desativa por completo o Text Autosizer do
+     Chrome/Android — o mecanismo que aumenta a fonte sozinho dentro
+     de colunas de grid/flex estreitas para "legibilidade", e que às
+     vezes ignora o valor 100%. Esse boost silencioso é a causa mais
+     provável de palavras cortadas só no celular (nunca no desktop). */
+  -webkit-text-size-adjust:none;text-size-adjust:none;
 }
 body{
   background:var(--white);
@@ -88,7 +93,14 @@ section{scroll-margin-top:84px} /* âncoras não ficam escondidas sob o header *
    palavra longa, um valor, uma URL) ESTICA a coluna além da tela — e
    como a página tem overflow-x:hidden, isso vira CORTE do lado direito
    no mobile (some no desktop, aparece no celular). */
-body{overflow-wrap:break-word} /* palavras/URLs longas quebram, não empurram */
+/* overflow-wrap:anywhere é mais forte que break-word: permite quebrar
+   NO MEIO da palavra sempre que ela não couber, mesmo que exista um
+   espaço mais cedo (break-word só age como último recurso da linha
+   inteira). Aplicado a todo texto de conteúdo — rede de segurança
+   final contra qualquer palavra que, por qualquer motivo (autosizer,
+   hinting de fonte, densidade de tela), acabe maior que sua caixa. */
+body{overflow-wrap:anywhere;word-break:normal}
+h1,h2,h3,p,span,li,a,b,small,summary,label{overflow-wrap:anywhere}
 /* min-width:0 nos ITENS de grid/flex para poderem encolher até caber
    (não aplico em botões para o texto deles não vazar) */
 .hero-grid > *, .spk > *, .int-grid > *, .gal-row > *, .chg > *,
