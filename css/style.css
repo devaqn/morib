@@ -83,6 +83,21 @@ a{color:inherit;text-decoration:none}
 ::selection{background:rgba(246,185,43,.5);color:var(--navy-900)}
 section{scroll-margin-top:84px} /* âncoras não ficam escondidas sob o header */
 
+/* ---------- 02b. BLINDAGEM ANTI-OVERFLOW (essencial p/ iOS) ----------
+   No Safari, itens de grid/flex têm min-width "auto": o conteúdo (uma
+   palavra longa, um valor, uma URL) ESTICA a coluna além da tela — e
+   como a página tem overflow-x:hidden, isso vira CORTE do lado direito
+   no mobile (some no desktop, aparece no celular). */
+body{overflow-wrap:break-word} /* palavras/URLs longas quebram, não empurram */
+/* min-width:0 nos ITENS de grid/flex para poderem encolher até caber
+   (não aplico em botões para o texto deles não vazar) */
+.hero-grid > *, .spk > *, .int-grid > *, .gal-row > *, .chg > *,
+.hero-meta > *, .int-info > *, .int-info div, .spk-meta div,
+.strip .wrap > *, .foot-top > *, .foot-bottom > *, .sec-top > *{min-width:0}
+/* botões já usam white-space:normal (quebram só se faltar espaço, sem vazar).
+   Exceção: o botão do header é curto e deve ficar sempre em 1 linha. */
+.nav .btn{white-space:nowrap;flex:none}
+
 /* ---------- 03. UTILITÁRIOS ---------- */
 .wrap{width:min(1120px,calc(100% - 48px));margin-inline:auto}
 
@@ -124,7 +139,7 @@ h2{font-size:clamp(1.75rem,3.6vw,2.6rem);font-weight:800;line-height:1.12;color:
   font-family:var(--f-disp);font-weight:700;font-size:.98rem;letter-spacing:-.01em;
   padding:.95rem 1.7rem;border-radius:10px;cursor:pointer;border:none;
   transition:transform .25s var(--ease-spring),box-shadow .25s ease,background .2s ease,border-color .2s ease,color .2s ease;
-  white-space:nowrap;
+  white-space:normal;text-align:center; /* deixa o texto quebrar se faltar espaço (não vaza/corta) */
 }
 .btn svg{flex:none;transition:transform .25s var(--ease-spring)}
 .btn:hover svg{transform:scale(1.15) rotate(-6deg)}   /* ícone "acorda" no hover */
@@ -568,6 +583,17 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 }
 .int-info small{font-size:.64rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45)}
 .int-info b{font-family:var(--f-disp);font-size:.9rem;font-weight:700;color:#fff}
+
+/* MOBILE: rótulo/valor empilhados (rótulo em cima, valor embaixo à
+   esquerda). Elimina o valor longo — ex.: @palestrantemoribmacedo,
+   integrapsicanalise.com.br — sendo empurrado/cortado na borda direita. */
+@media (max-width:600px){
+  .spk-meta div, .int-info div{
+    flex-direction:column;align-items:flex-start;gap:.2rem;
+  }
+  .spk-meta b, .int-info b{text-align:left;max-width:100%}
+  .spk-meta div:hover, .int-info div:hover{padding-left:0}
+}
 /* selo "parceria oficial" — dá peso à INTEGRA como corealizadora */
 .int-badge{
   display:inline-flex;align-items:center;gap:.5rem;
