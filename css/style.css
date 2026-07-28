@@ -263,11 +263,29 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   pointer-events:none;white-space:nowrap;user-select:none;
   will-change:transform;
 }
+/* desktop: título e texto empilhados à esquerda; foto à direita,
+   centralizada, ocupando as duas linhas */
 .hero-grid{
-  display:grid;grid-template-columns:1.08fr .92fr;gap:clamp(2.4rem,6vw,4.5rem);
+  display:grid;
+  grid-template-columns:1.08fr .92fr;
+  grid-template-areas:
+    "lead photo"
+    "body photo";
+  column-gap:clamp(2.4rem,6vw,4.5rem);row-gap:0;
   align-items:center;position:relative;z-index:1;
 }
-@media (max-width:920px){.hero-grid{grid-template-columns:1fr}}
+.hero-lead{grid-area:lead}
+.hero-body{grid-area:body}
+.hero-grid .photo-card{grid-area:photo;align-self:center}
+/* mobile: gancho (título) → foto → texto/CTAs */
+@media (max-width:920px){
+  .hero-grid{
+    grid-template-columns:1fr;
+    grid-template-areas:"lead" "photo" "body";
+  }
+  .hero-grid .photo-card{margin:1.7rem auto 0}
+  .hero-body{margin-top:1.7rem}
+}
 .hero .kicker{color:rgba(255,255,255,.65)}
 .hero h1{
   font-size:clamp(2.5rem,5.6vw,4.15rem);
@@ -558,6 +576,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 .gal-hero{
   position:relative;border-radius:calc(var(--r) + 6px);overflow:hidden;
   aspect-ratio:21/9;box-shadow:var(--shadow-lg);cursor:pointer;
+  background:linear-gradient(135deg,var(--navy-700),var(--navy-900)); /* placeholder enquanto a foto carrega */
 }
 @media (max-width:640px){.gal-hero{aspect-ratio:3/2}}
 /* buffer de escala (scale) para o parallax do JS (transform) não abrir bordas */
@@ -579,6 +598,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   position:relative;border-radius:var(--r);overflow:hidden;
   aspect-ratio:4/5;cursor:pointer;
   box-shadow:var(--shadow-md);
+  background:linear-gradient(135deg,var(--navy-700),var(--navy-900)); /* placeholder enquanto a foto carrega */
 }
 .gal-tile img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;transition:transform .7s var(--ease-out),filter .5s ease}
 .gal-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(11,16,41,.72));transition:opacity .4s ease}
@@ -695,6 +715,9 @@ footer{background:var(--navy-950);color:#fff;padding:3.4rem 0 7.5rem}
 .foot-top{display:flex;align-items:center;justify-content:space-between;gap:1.6rem;flex-wrap:wrap}
 .foot-brand{display:flex;flex-direction:column;line-height:1.2}
 .foot-brand b{font-family:var(--f-disp);font-weight:800;font-size:1.5rem;letter-spacing:-.02em}
+/* especificidade acima de ".foot-top img" (que dimensiona a logo da INTEGRA);
+   align-self evita o stretch do flex-column (mantém proporção e alinha à esquerda) */
+.foot-top .foot-logo{height:44px;width:auto;align-self:flex-start;margin-bottom:.55rem} /* logo dourada da marca */
 .foot-brand span{font-size:.66rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.45)}
 .foot-top img{width:64px;height:64px;object-fit:contain;opacity:.9}
 .foot-bottom{
