@@ -16,7 +16,8 @@
    07. Tilt 3D (cartão do hero + galeria)
    08. Formulário → WhatsApp
    09. Lightbox navegável (setas, teclado, arrastar)
-   10. Ano do rodapé
+   10. FAQ com deslize suave de altura
+   11. Ano do rodapé
    ============================================================ */
 
 /* ---------- 01. HELPERS ---------- */
@@ -385,5 +386,48 @@ lightbox.addEventListener('pointerup', e => {
   swipeX = null;
 });
 
-/* ---------- 10. ANO DO RODAPÉ ---------- */
+/* ---------- 10. FAQ COM DESLIZE SUAVE DE ALTURA ----------
+   Anima a altura da resposta (0 ↔ altura real) para uma transição
+   suave. Só entra em ação quando há movimento permitido; sob
+   prefers-reduced-motion o <details> nativo abre/fecha instantâneo.
+   Um timeout de segurança conclui o estado caso 'transitionend'
+   não dispare (ex.: duração ~0 em alguns navegadores). */
+if (!reduceMotion) {
+  $$('.faq details').forEach(det => {
+    const summary = det.querySelector('summary');
+    const ans     = det.querySelector('.ans');
+    if (!summary || !ans) return;
+    let animating = false;
+
+    // conclui a animação de forma idempotente (via evento OU timeout)
+    const settle = (fn) => {
+      let done = false;
+      const finish = () => { if (done) return; done = true; fn(); animating = false; ans.removeEventListener('transitionend', finish); };
+      ans.addEventListener('transitionend', finish, { once: true });
+      setTimeout(finish, 480); // rede de segurança
+    };
+
+    summary.addEventListener('click', e => {
+      e.preventDefault();
+      if (animating) return;
+      animating = true;
+
+      if (det.open) {                 // ---- FECHAR ----
+        ans.style.height = ans.scrollHeight + 'px';
+        ans.style.opacity = '1';
+        requestAnimationFrame(() => { ans.style.height = '0px'; ans.style.opacity = '0'; });
+        settle(() => { det.open = false; ans.style.height = ans.style.opacity = ''; });
+      } else {                        // ---- ABRIR ----
+        det.open = true;              // renderiza o conteúdo primeiro
+        const target = ans.scrollHeight;
+        ans.style.height = '0px';
+        ans.style.opacity = '0';
+        requestAnimationFrame(() => { ans.style.height = target + 'px'; ans.style.opacity = '1'; });
+        settle(() => { ans.style.height = 'auto'; });
+      }
+    });
+  });
+}
+
+/* ---------- 11. ANO DO RODAPÉ ---------- */
 $('#year').textContent = new Date().getFullYear();

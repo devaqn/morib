@@ -59,14 +59,24 @@
 
 /* ---------- 02. RESET E BASE ---------- */
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+/* trava o scroll horizontal na RAIZ (html) e no body.
+   No iOS o scroll lateral acontece no <html>, então só no body não
+   basta — sem isto, um filho animado que "vaza" do overflow:hidden
+   (bug do Safari) deixava rolar de lado e mostrava uma listra branca. */
+html{
+  scroll-behavior:smooth;overflow-x:hidden;
+  -webkit-text-size-adjust:100%;text-size-adjust:100%; /* iOS não reescala o texto */
+}
 body{
   background:var(--white);
   color:var(--ink);
   font-family:var(--f-body);
   font-size:16px;line-height:1.65;
   -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  -webkit-tap-highlight-color:transparent; /* sem flash azul ao tocar no mobile */
   overflow-x:hidden;
+  width:100%;position:relative;
 }
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
@@ -157,7 +167,7 @@ header .nav{display:flex;align-items:center;justify-content:space-between;gap:1r
 .nav-phone b{font-family:var(--f-disp);font-size:.92rem;font-weight:700;color:#fff;transition:color .35s ease}
 .nav .btn{padding:.7rem 1.25rem;font-size:.88rem}
 /* estado sólido (após rolar): fundo branco, textos escuros */
-header.solid{background:rgba(255,255,255,.96);backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--hair),0 12px 32px -24px rgba(11,16,41,.25);padding:.65rem 0}
+header.solid{background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--hair),0 12px 32px -24px rgba(11,16,41,.25);padding:.65rem 0}
 header.solid .brand b,header.solid .nav-phone b{color:var(--ink)}
 header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 @media (max-width:640px){
@@ -172,6 +182,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
    O JS conduz; a animação "preFail" é rede de segurança (7s). */
 #preloader{
   position:fixed;inset:0;z-index:200;overflow:hidden;color:#fff;
+  contain:paint;                                   /* clipa o sheen/ORATÓRIA no iOS */
   background:
     radial-gradient(75% 55% at 50% 42%, rgba(35,46,92,.72), transparent 72%),
     var(--navy-950);
@@ -254,6 +265,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   color:#fff;
   padding:clamp(7.2rem,12vw,9.5rem) 0 clamp(3.4rem,6vw,5rem);
   position:relative;overflow:hidden;
+  contain:paint; /* clipa a marca d'água ORATÓRIA (parallax) mesmo no iOS */
 }
 /* marca d'água ORATÓRIA — o JS aplica parallax sutil nela */
 .hero-mark{
@@ -296,11 +308,17 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 .hero h1 em{
   font-family:var(--f-accent);font-style:normal;font-weight:400;
   font-size:1.04em;letter-spacing:0;
-  background:linear-gradient(100deg,var(--yellow) 42%,#ffe9a8 50%,var(--yellow) 58%);
-  background-size:250% 100%;
-  -webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;color:transparent;
-  animation:glint 6s ease-in-out infinite;
+  color:var(--yellow); /* fallback: dourado sólido se não houver clip de texto */
+}
+/* só aplica o degradê recortado onde há suporte (evita texto invisível) */
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  .hero h1 em{
+    background:linear-gradient(100deg,var(--yellow) 42%,#ffe9a8 50%,var(--yellow) 58%);
+    background-size:250% 100%;
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    animation:glint 6s ease-in-out infinite;
+  }
 }
 .hero .lede{color:rgba(255,255,255,.72);margin-top:1.4rem}
 .hero-ctas{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2.1rem}
@@ -396,6 +414,8 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 .marquee{
   border-block:1px solid var(--hair);
   overflow:hidden;padding:.9rem 0;background:#fff;
+  contain:paint;                 /* garante o clip do letreiro animado no iOS */
+  -webkit-transform:translateZ(0); /* cria camada de composição que clipa de fato */
 }
 .marquee-track{
   display:flex;gap:3.2rem;width:max-content;
@@ -614,7 +634,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   position:absolute;top:.8rem;right:.8rem;z-index:3;
   width:34px;height:34px;border-radius:9px;
   display:flex;align-items:center;justify-content:center;
-  background:rgba(11,16,41,.55);backdrop-filter:blur(4px);
+  background:rgba(11,16,41,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
   opacity:0;transform:scale(.8);transition:opacity .3s ease,transform .3s var(--ease-spring);
 }
 .gal-hero:hover .zoom,.gal-tile:hover .zoom{opacity:1;transform:none}
@@ -623,7 +643,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 .lightbox{
   position:fixed;inset:0;z-index:90;
   display:flex;align-items:center;justify-content:center;padding:5vw;
-  background:rgba(8,11,28,.92);backdrop-filter:blur(6px);
+  background:rgba(8,11,28,.92);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
   opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s ease;
 }
 .lightbox.open{opacity:1;visibility:visible}
@@ -657,15 +677,16 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 .faq summary::-webkit-details-marker{display:none}
 .faq summary svg{flex:none;transition:transform .35s var(--ease-spring);color:var(--body)}
 .faq details[open] summary svg{transform:rotate(45deg);color:var(--yellow-d)}
-/* resposta entra com fade + deslize ao abrir */
+/* resposta abre/fecha com deslize suave de altura (controlado no JS;
+   se o JS não rodar, o <details> nativo ainda funciona) */
 .faq .ans{
   padding:0 0 1.3rem;color:var(--body);font-size:.95rem;max-width:60ch;
+  overflow:hidden;transition:height .38s var(--ease-out),opacity .38s ease;
 }
-.faq details[open] .ans{animation:faqOpen .45s var(--ease-out)}
 .faq .ans a{font-weight:700;color:var(--ink);border-bottom:2px solid var(--yellow)}
 
 /* ---------- 16. CTA FINAL ---------- */
-.cta{background:var(--yellow);position:relative;overflow:hidden}
+.cta{background:var(--yellow);position:relative;overflow:hidden;contain:paint}
 .cta::before{ /* brilho radial que se move devagar — faixa nunca fica "morta" */
   content:"";position:absolute;inset:-40%;
   background:radial-gradient(38% 38% at 50% 50%, rgba(255,255,255,.35), transparent 70%);
@@ -748,7 +769,7 @@ footer small{color:rgba(255,255,255,.4);font-size:.76rem;line-height:1.7}
 .sticky-cta{
   position:fixed;inset:auto 0 0 0;z-index:65;
   padding:.7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
-  background:rgba(255,255,255,.97);backdrop-filter:blur(10px);
+  background:rgba(255,255,255,.97);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
   border-top:1px solid var(--hair);
   display:none;
   transform:translateY(110%);transition:transform .45s var(--ease-out);
@@ -846,10 +867,6 @@ footer small{color:rgba(255,255,255,.4);font-size:.76rem;line-height:1.7}
   from{transform:translate(-6%,-4%)}
   to{transform:translate(6%,4%)}
 }
-@keyframes faqOpen{        /* resposta do FAQ surgindo */
-  from{opacity:0;transform:translateY(-6px)}
-  to{opacity:1;transform:none}
-}
 @keyframes preIn{          /* conteúdo do preloader surgindo */
   from{opacity:0;transform:translateY(14px)}
   to{opacity:1;transform:none}
@@ -857,6 +874,50 @@ footer small{color:rgba(255,255,255,.4);font-size:.76rem;line-height:1.7}
 @keyframes preSheen{       /* varredura de luz diagonal no preloader */
   0%{transform:translateX(-120%)}
   55%,100%{transform:translateX(120%)}
+}
+
+/* ============================================================
+   19b. POLISH DE INTERAÇÃO, TOQUE E ACESSIBILIDADE
+   (micro-transições + comportamento correto em desktop e touch)
+   ============================================================ */
+
+/* --- foco visível por teclado (acessibilidade + acabamento) --- */
+a:focus-visible,button:focus-visible,summary:focus-visible,
+input:focus-visible,.ig:focus-visible{
+  outline:2px solid var(--yellow);outline-offset:3px;border-radius:8px;
+}
+/* sem outline quando o foco vem do clique/toque (só no teclado) */
+a:focus:not(:focus-visible),button:focus:not(:focus-visible),
+summary:focus:not(:focus-visible){outline:none}
+
+/* --- áreas de toque maiores em links de texto (mobile) --- */
+.foot-links a{padding-block:.35rem;position:relative}
+.strip-right a{padding-block:.25rem}
+.ig{width:40px;height:40px} /* Instagram do hero: 38 -> 40px */
+
+/* --- sublinhado dourado animado nos links do rodapé --- */
+.foot-links a::after{
+  content:"";position:absolute;left:0;bottom:.15rem;height:1.5px;width:100%;
+  background:var(--yellow);transform:scaleX(0);transform-origin:right;
+  transition:transform .3s var(--ease-out);
+}
+
+/* --- resposta tátil: leve "afundar" ao pressionar (desktop e mobile) --- */
+.pcard:active,.chg article:active,.gal-tile:active,.aud li:active,
+.cta-box:active,.faq summary:active,.photo-card:active{transform:scale(.99)}
+.wa-float:active{transform:scale(.94)}
+
+/* --- efeitos de HOVER só onde há mouse de verdade ---
+   evita o hover "grudado" após o toque no celular --- */
+@media (hover:hover){
+  .foot-links a:hover::after{transform:scaleX(1);transform-origin:left}
+}
+@media (hover:none){
+  .btn:hover,.cta-box:hover,.photo-card:hover,.gal-tile:hover,
+  .foot-social a:hover,.aud li:hover,.spk-meta div:hover,
+  .int-logo:hover,.wa-float:hover,.foot-links a:hover{transform:none}
+  .aud li:hover{padding-left:0}         /* não desloca a lista ao tocar */
+  .spk-meta div:hover{padding-left:0}
 }
 
 /* ---------- 20. PERFORMANCE E ACESSIBILIDADE ---------- */
