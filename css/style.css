@@ -339,7 +339,8 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
    a cada 6s — chama o olho sem cansar */
 .hero h1 em{
   font-family:var(--f-accent);font-style:normal;font-weight:400;
-  font-size:1.04em;letter-spacing:0;
+  font-size:1.3em;letter-spacing:0;text-transform:uppercase; /* ORATÓRIA maior e em caixa alta, a pedido do cliente */
+  line-height:.85;vertical-align:-.06em; /* compensa a fonte maior sem desalinhar a linha */
   color:var(--yellow); /* fallback: dourado sólido se não houver clip de texto */
 }
 /* só aplica o degradê recortado onde há suporte (evita texto invisível) */
@@ -622,6 +623,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 }
 .int-info small{font-size:.64rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45)}
 .int-info b{font-family:var(--f-disp);font-size:.9rem;font-weight:700;color:#fff}
+.int-info a b{border-bottom:2px solid var(--yellow)} /* endereço com link pro Google Maps */
 
 /* MOBILE: rótulo/valor empilhados (rótulo em cima, valor embaixo à
    esquerda). Elimina o valor longo — ex.: @palestrantemoribmacedo,
