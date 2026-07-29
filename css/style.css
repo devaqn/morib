@@ -316,14 +316,19 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 .hero-lead{grid-area:lead}
 .hero-body{grid-area:body}
 .hero-grid .photo-card{grid-area:photo;align-self:center}
-/* mobile: gancho (título) → foto → texto/CTAs */
+/* MOBILE: sem CSS Grid — flexbox em coluna + "order" preserva a
+   sequência título → foto → texto/CTAs sem nenhum cálculo de trilha
+   de Grid (a mesma classe de bug do .spk/.int-grid: sob a "Escala de
+   texto" de acessibilidade do Chrome Android, Grid pode calcular
+   largura errada em layouts aninhados e cortar texto). Flexbox em
+   coluna sempre dá 100% de largura ao filho — imune a esse cálculo. */
 @media (max-width:920px){
   .hero-grid{
-    grid-template-columns:1fr;
-    grid-template-areas:"lead" "photo" "body";
+    display:flex;flex-direction:column;
   }
-  .hero-grid .photo-card{margin:1.7rem auto 0}
-  .hero-body{margin-top:1.7rem}
+  .hero-lead{order:1;width:100%}
+  .hero-grid .photo-card{order:2;margin:1.7rem auto 0}
+  .hero-body{order:3;width:100%;margin-top:1.7rem}
 }
 .hero .kicker{color:rgba(255,255,255,.65)}
 .hero h1{
@@ -464,7 +469,18 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 /* ---------- 11. APRESENTADOR ---------- */
 .section{padding:clamp(4.2rem,8.5vw,6.8rem) 0}
 .spk{display:grid;grid-template-columns:.88fr 1.12fr;gap:clamp(2.6rem,6vw,5rem);align-items:center}
-@media (max-width:900px){.spk{grid-template-columns:1fr}}
+/* MOBILE: nada de CSS Grid — vira empilhamento simples (block).
+   Motivo: sob a "Escala de texto" de acessibilidade do Chrome
+   Android (que não pode ser desativada por CSS, de propósito),
+   o cálculo de largura de colunas de Grid pode ficar incorreto em
+   layouts aninhados, cortando texto no lado direito. Um bloco
+   simples empilhado (100% de largura) nunca sofre desse cálculo
+   errado, em nenhuma escala de texto. */
+@media (max-width:900px){
+  .spk{display:block}
+  .spk > *{width:100%;max-width:100%}
+  .spk > * + *{margin-top:1.8rem}
+}
 .spk-visual{position:relative}
 /* duotone azul: foto em p&b + camada azul por cima.
    No hover, a cor real da foto é revelada — pequeno momento "uau". */
@@ -530,8 +546,11 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 .aud h3{font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:800;color:var(--ink)}
 .aud p{color:var(--body);font-size:.95rem;text-align:right;max-width:36ch}
 @media (max-width:700px){
-  .aud li{grid-template-columns:44px 1fr}
-  .aud p{grid-column:2;text-align:left;max-width:none;margin-top:.2rem}
+  /* flexbox no lugar de Grid (mesmo motivo das outras seções) */
+  .aud li{display:flex;flex-wrap:wrap;align-items:baseline}
+  .aud .n{flex:0 0 auto;width:44px}
+  .aud h3{flex:1 1 auto;min-width:0}
+  .aud p{flex-basis:100%;text-align:left;max-width:none;margin-top:.2rem;padding-left:44px}
 }
 
 /* ---------- 13. O MÉTODO ---------- */
@@ -566,7 +585,15 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   opacity:.06;pointer-events:none;
 }
 .int-grid{display:grid;grid-template-columns:auto 1fr;gap:clamp(2.6rem,7vw,5.5rem);align-items:center;position:relative;z-index:1}
-@media (max-width:860px){.int-grid{grid-template-columns:1fr}}
+/* MOBILE: mesmo motivo do .spk — Grid vira bloco simples empilhado,
+   imune ao recálculo incorreto de largura sob a "Escala de texto"
+   de acessibilidade do Chrome Android. */
+@media (max-width:860px){
+  .int-grid{display:block}
+  .int-grid > *{width:100%;max-width:100%}
+  .int-logo{margin-inline:auto}          /* mantém o círculo centralizado */
+  .int-grid > * + *{margin-top:1.8rem}
+}
 /* logo dentro de anel que gira lentíssimo — vida sem distração */
 .int-logo{
   width:clamp(180px,22vw,240px);aspect-ratio:1;border-radius:50%;
@@ -588,7 +615,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   display:grid;grid-template-columns:repeat(2,minmax(0,260px));gap:0 2.5rem;
   border-top:1px solid var(--hair-d);margin-top:1.9rem;
 }
-@media (max-width:560px){.int-info{grid-template-columns:1fr}}
+@media (max-width:560px){.int-info{display:block}}
 .int-info div{
   display:flex;justify-content:space-between;gap:1rem;align-items:baseline;
   padding:.75rem 0;border-bottom:1px solid var(--hair-d);
@@ -615,7 +642,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
    já limita a largura, então o "ch" é desnecessário e removê-lo
    elimina essa classe inteira de corte. */
 @media (max-width:640px){
-  .spk h2,.integra h2,.cta h2,.lede,.spk p,.aud p,.faq .ans,.gal-cap{max-width:none}
+  .spk h2,.integra h2,.cta h2,.lede,.spk p,.cta p,.aud p,.faq .ans,.gal-cap{max-width:none}
 }
 /* selo "parceria oficial" — dá peso à INTEGRA como corealizadora */
 .int-badge{
@@ -751,7 +778,11 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   align-items:center;padding-block:clamp(3.6rem,7vw,5.5rem);
   position:relative;z-index:1;
 }
-@media (max-width:880px){.cta .wrap{grid-template-columns:1fr}}
+@media (max-width:880px){
+  .cta .wrap{display:block}
+  .cta .wrap > *{width:100%;max-width:100%}
+  .cta .wrap > * + *{margin-top:1.8rem}
+}
 .cta .kicker{color:rgba(16,23,58,.6)}
 .cta .kicker::before{background:var(--navy-900)}
 .cta h2{color:var(--navy-900);letter-spacing:-.03em;font-size:clamp(1.9rem,4.2vw,3rem);max-width:16ch}
