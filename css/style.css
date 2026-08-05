@@ -929,6 +929,12 @@ footer small{color:rgba(255,255,255,.4);font-size:.76rem;line-height:1.7}
   transition:clip-path 1s var(--ease-out) var(--d,0s),opacity .9s var(--ease-out) var(--d,0s);
 }
 .reveal.rv-clip.on{-webkit-clip-path:inset(0 0 0 0);clip-path:inset(0 0 0 0)}
+/* ⚠ ESSENCIAL: estas variações vêm DEPOIS de ".reveal.on" e têm a mesma
+   especificidade — sem a regra abaixo, elas venceriam a cascata e o
+   elemento ficaria PARA SEMPRE deslocado 52px (cortando o texto do lado
+   direito no celular). Aqui o estado revelado é reposto, com
+   especificidade maior e por último. */
+.reveal.rv-left.on,.reveal.rv-right.on,.reveal.rv-scale.on{transform:none}
 
 /* --- botões magnéticos: seguem levemente o cursor (JS) --- */
 .btn.is-magnetic{will-change:transform}
