@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico — Morib</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font:14px/1.5 system-ui,-apple-system,sans-serif;background:#10173a;color:#fff;padding:14px}
+  h1{font-size:17px;margin-bottom:4px}
+  .sub{font-size:12px;color:#9aa4c8;margin-bottom:14px}
+  .card{background:#1b2450;border-radius:10px;padding:12px;margin-bottom:10px}
+  .card h2{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#f6b92b;margin-bottom:8px}
+  .row{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.09);font-size:13px}
+  .row:last-child{border:0}
+  .row span{color:#9aa4c8;flex:none}
+  .row b{text-align:right;word-break:break-all}
+  .ok{color:#4ade80}.bad{color:#f87171}.warn{color:#fbbf24}
+  ul{list-style:none;font-size:12px}
+  li{padding:5px 0;border-bottom:1px solid rgba(255,255,255,.09);word-break:break-all}
+  li:last-child{border:0}
+  .big{font-size:22px;font-weight:800;text-align:center;padding:10px 0}
+</style>
+</head>
+<body>
+<h1>Diagnóstico do site</h1>
+<p class="sub">Tire um print desta tela inteira e mande. Role até o fim.</p>
+
+<div class="card"><h2>Veredito</h2><div class="big" id="veredito">medindo…</div></div>
+<div class="card"><h2>Tela</h2><div id="tela"></div></div>
+<div class="card"><h2>Texto e zoom</h2><div id="texto"></div></div>
+<div class="card"><h2>Regras mobile (media queries)</h2><div id="mq"></div></div>
+<div class="card"><h2>Quem está largo demais</h2><ul id="culpados"><li>medindo…</li></ul></div>
+
+<script>
+(function(){
+  var vw = document.documentElement.clientWidth;
+  var body = document.body;
+
+  function row(label, value, cls){
+    return '<div class="row"><span>'+label+'</span><b class="'+(cls||'')+'">'+value+'</b></div>';
+  }
+
+  /* ---- 1. Tela ---- */
+  document.getElementById('tela').innerHTML =
+    row('Largura CSS (clientWidth)', vw+' px') +
+    row('window.innerWidth', window.innerWidth+' px') +
+    row('screen.width', screen.width+' px') +
+    row('devicePixelRatio', window.devicePixelRatio) +
+    row('visualViewport.width', window.visualViewport ? Math.round(visualViewport.width)+' px' : '—') +
+    row('visualViewport.scale (zoom)', window.visualViewport ? visualViewport.scale.toFixed(2) : '—',
+        (window.visualViewport && visualViewport.scale > 1.02) ? 'bad' : 'ok');
+
+  /* ---- 2. Texto: revela a escala de fonte do sistema ---- */
+  var probe = document.createElement('div');
+  probe.style.cssText = 'position:absolute;left:-9999px;font-size:16px;width:10ch;font-family:system-ui';
+  document.body.appendChild(probe);
+  var chW = probe.getBoundingClientRect().width / 10;
+  var bodyFS = parseFloat(getComputedStyle(body).fontSize);
+  probe.remove();
+
+  var escala = (bodyFS / 14 * 100);  // body foi definido em 14px neste arquivo
+  document.getElementById('texto').innerHTML =
+    row('font-size do body (pedi 14px)', bodyFS.toFixed(1)+' px', Math.abs(bodyFS-14)>0.6 ? 'bad':'ok') +
+    row('Escala de texto aplicada', escala.toFixed(0)+'%', Math.abs(escala-100)>5 ? 'bad':'ok') +
+    row('Largura de 1ch (16px)', chW.toFixed(2)+' px') +
+    row('58ch dariam', Math.round(chW*58)+' px', (chW*58) > vw ? 'bad':'ok');
+
+  /* ---- 3. Media queries que o site usa ---- */
+  var mqs = [640, 700, 720, 860, 880, 900, 920];
+  var html = '';
+  mqs.forEach(function(w){
+    var m = matchMedia('(max-width:'+w+'px)').matches;
+    html += row('max-width: '+w+'px', m ? 'ATIVA' : 'inativa', m ? 'ok':'bad');
+  });
+  document.getElementById('mq').innerHTML = html;
+
+  /* ---- 4. Culpados: mede a PÁGINA REAL num iframe ---- */
+  var f = document.createElement('iframe');
+  f.src = '/';
+  f.style.cssText = 'position:absolute;left:-9999px;top:0;width:'+vw+'px;height:600px;border:0';
+  document.body.appendChild(f);
+
+  f.onload = function(){
+    setTimeout(function(){
+      try{
+        var d = f.contentDocument, w = f.contentWindow;
+        var fvw = d.documentElement.clientWidth;
+        var out = [], maior = 0, maiorEl = '';
+
+        var all = d.querySelectorAll('h1,h2,h3,p,div,section,ul,li,figure,a,b');
+        for (var i=0;i<all.length;i++){
+          var el = all[i];
+          var cs = w.getComputedStyle(el);
+          if (cs.position === 'fixed' || cs.position === 'absolute') continue;
+          var r = el.getBoundingClientRect();
+          if (r.width > fvw + 2){
+            var nome = el.tagName.toLowerCase() + (el.className && typeof el.className === 'string' ? '.'+el.className.split(' ')[0] : '');
+            var txt = (el.textContent||'').trim().slice(0,28);
+            out.push('<li><b class="bad">'+Math.round(r.width)+'px</b> — '+nome+'<br><span style="color:#9aa4c8">'+txt+'</span></li>');
+            if (r.width > maior){ maior = Math.round(r.width); maiorEl = nome; }
+          }
+        }
+
+        var scrollW = d.documentElement.scrollWidth;
+        document.getElementById('culpados').innerHTML =
+          '<li>Viewport da página: <b>'+fvw+'px</b></li>' +
+          '<li>Largura do conteúdo: <b class="'+(scrollW>fvw+2?'bad':'ok')+'">'+scrollW+'px</b></li>' +
+          (out.length ? out.join('') : '<li class="ok">Nenhum elemento largo demais ✓</li>');
+
+        var v = document.getElementById('veredito');
+        if (out.length){
+          v.innerHTML = '<span class="bad">CORTA</span><br><span style="font-size:13px;font-weight:400">'+maiorEl+' = '+maior+'px<br>(tela tem '+fvw+'px)</span>';
+        } else if (window.visualViewport && visualViewport.scale > 1.02){
+          v.innerHTML = '<span class="bad">ZOOM ATIVO</span><br><span style="font-size:13px;font-weight:400">a página está ampliada '+visualViewport.scale.toFixed(2)+'x</span>';
+        } else if (Math.abs(escala-100) > 5){
+          v.innerHTML = '<span class="warn">FONTE AMPLIADA</span><br><span style="font-size:13px;font-weight:400">escala de texto em '+escala.toFixed(0)+'%</span>';
+        } else {
+          v.innerHTML = '<span class="ok">TUDO CERTO</span><br><span style="font-size:13px;font-weight:400">nada corta neste aparelho</span>';
+        }
+        f.remove();
+      }catch(e){
+        document.getElementById('culpados').innerHTML = '<li class="bad">Não consegui medir: '+e.message+'</li>';
+        document.getElementById('veredito').innerHTML = '<span class="warn">ver dados acima</span>';
+      }
+    }, 3500);
+  };
+})();
+</script>
+</body>
+</html>

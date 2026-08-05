@@ -117,7 +117,10 @@ h1,h2,h3,p,span,li,a,b,small,summary,label{overflow-wrap:break-word;overflow-wra
 
 h1,h2,h3{font-family:var(--f-disp);letter-spacing:-.02em}
 h2{font-size:2rem;font-size:clamp(1.75rem,3.6vw,2.6rem);font-weight:800;line-height:1.12;color:var(--ink)}
-.lede{font-size:1.06rem;color:var(--body);max-width:60ch}
+/* min(…,100%) = o limite em "ch" NUNCA pode ultrapassar a largura do
+   container. Sem isso, com fonte ampliada 58ch pode dar 500px numa tela
+   de 412px e o texto é cortado. O valor simples antes é o fallback. */
+.lede{font-size:1.06rem;color:var(--body);max-width:60ch;max-width:min(60ch,100%)}
 
 /* rótulo de seção com quadradinho amarelo */
 .kicker{
@@ -520,8 +523,8 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   padding:.5rem .85rem;border-radius:8px;
   box-shadow:0 10px 24px -10px rgba(11,16,41,.45);
 }
-.spk h2{max-width:17ch}
-.spk p{color:var(--body);margin-top:1.15rem;max-width:58ch}
+.spk h2{max-width:17ch;max-width:min(17ch,100%)}
+.spk p{color:var(--body);margin-top:1.15rem;max-width:58ch;max-width:min(58ch,100%)}
 .spk p b{color:var(--ink);font-weight:600}
 .spk-meta{border-top:1px solid var(--hair);margin-top:1.8rem}
 .spk-meta div{
@@ -554,7 +557,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 .aud li:hover::before{transform:scaleY(1)}
 .aud .n{font-family:var(--f-accent);font-size:1rem;color:var(--yellow-d)}
 .aud h3{font-size:1.3rem;font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:800;color:var(--ink)}
-.aud p{color:var(--body);font-size:.95rem;text-align:right;max-width:36ch}
+.aud p{color:var(--body);font-size:.95rem;text-align:right;max-width:36ch;max-width:min(36ch,100%)}
 @media (max-width:700px){
   /* flexbox no lugar de Grid (mesmo motivo das outras seções) */
   .aud li{display:flex;flex-wrap:wrap;align-items:baseline}
@@ -619,7 +622,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 }
 .int-logo img{width:82%;height:82%;object-fit:contain}
 .integra .kicker{color:rgba(255,255,255,.6)}
-.integra h2{color:#fff;max-width:20ch}
+.integra h2{color:#fff;max-width:20ch;max-width:min(20ch,100%)}
 .integra .lede{color:rgba(255,255,255,.7);margin-top:1.15rem}
 .int-info{
   display:grid;grid-template-columns:repeat(2,minmax(0,260px));gap:0 2.5rem;
@@ -701,6 +704,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   position:absolute;z-index:2;max-width:24ch;
   left:1.6rem;left:clamp(1.2rem,3vw,2.4rem);
   bottom:1.4rem;bottom:clamp(1.2rem,3vw,2rem);
+  max-width:min(24ch,100%);
 }
 .gal-cap b{display:block;font-family:var(--f-disp);font-weight:800;font-size:1.25rem;font-size:clamp(1.1rem,2.2vw,1.6rem);line-height:1.2}
 .gal-cap span{font-size:.8rem;color:rgba(255,255,255,.7);font-weight:600}
@@ -773,7 +777,8 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 /* resposta abre/fecha com deslize suave de altura (controlado no JS;
    se o JS não rodar, o <details> nativo ainda funciona) */
 .faq .ans{
-  padding:0 0 1.3rem;color:var(--body);font-size:.95rem;max-width:60ch;
+  padding:0 0 1.3rem;color:var(--body);font-size:.95rem;
+  max-width:60ch;max-width:min(60ch,100%);
   overflow:hidden;transition:height .38s var(--ease-out),opacity .38s ease;
 }
 .faq .ans a{font-weight:700;color:var(--ink);border-bottom:2px solid var(--yellow)}
@@ -801,8 +806,8 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 }
 .cta .kicker{color:rgba(16,23,58,.6)}
 .cta .kicker::before{background:var(--navy-900)}
-.cta h2{color:var(--navy-900);letter-spacing:-.03em;font-size:2.3rem;font-size:clamp(1.9rem,4.2vw,3rem);max-width:16ch}
-.cta p{color:rgba(16,23,58,.72);margin-top:1rem;max-width:46ch;font-size:1rem}
+.cta h2{color:var(--navy-900);letter-spacing:-.03em;font-size:2.3rem;font-size:clamp(1.9rem,4.2vw,3rem);max-width:16ch;max-width:min(16ch,100%)}
+.cta p{color:rgba(16,23,58,.72);margin-top:1rem;max-width:46ch;max-width:min(46ch,100%);font-size:1rem}
 .cta-box{
   background:#fff;border-radius:calc(var(--r) + 4px);
   padding:1.9rem;padding:clamp(1.6rem,3.5vw,2.2rem);
