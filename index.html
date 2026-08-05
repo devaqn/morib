@@ -54,8 +54,8 @@
 <!-- estilos e script (defer = baixa em paralelo, executa após o parse)
      ?v=2 = "cache-busting": força o navegador a baixar a versão nova,
      evitando que o Safari sirva CSS/JS antigos do cache -->
-<link rel="stylesheet" href="css/style.css?v=12">
-<script src="js/main.js?v=12" defer></script>
+<link rel="stylesheet" href="css/style.css?v=13">
+<script src="js/main.js?v=13" defer></script>
 </head>
 <body class="loading">
 
@@ -99,15 +99,67 @@
        NENHUM conteúdo pode ficar invisível: revela todos os blocos */
     var r = document.querySelectorAll('.reveal');
     for (var i = 0; i < r.length; i++) { r[i].classList.add('on'); }
-    // revela qualquer conteúdo que ainda não apareceu (se o main.js falhou)
-    var r = document.querySelectorAll('.reveal');
-    for (var i = 0; i < r.length; i++) r[i].classList.add('on');
     var p = document.getElementById('preloader');
     if (!p) return;
     p.style.transition = 'opacity .4s ease';
     p.style.opacity = '0';
     setTimeout(function () { if (p) p.remove(); }, 450);
   }, 6000);
+</script>
+
+<!-- ======================================================
+     PAINEL DE DIAGNÓSTICO (só aparece com ?debug=1 na URL)
+     Mede a PÁGINA REAL no aparelho do visitante e aponta,
+     com nome e tamanho, qualquer elemento mais largo que a
+     tela. Invisível para o público.
+     ====================================================== -->
+<script>
+if (location.search.indexOf('debug=1') > -1) {
+  setTimeout(function () {
+    var vw = document.documentElement.clientWidth;
+    var box = document.createElement('div');
+    box.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:9999;max-height:62vh;overflow:auto;'
+      + 'background:#0b1029;color:#fff;font:12px/1.45 system-ui,sans-serif;padding:12px;border-top:3px solid #f6b92b';
+
+    // mede a largura real de cada bloco de conteúdo
+    var achados = [], maior = 0, maiorNome = '';
+    var els = document.querySelectorAll('h1,h2,h3,p,div,section,ul,li,figure,b,a');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i], cs = getComputedStyle(el);
+      if (cs.position === 'fixed' || cs.position === 'absolute') continue;
+      if (el.closest('.marquee-track')) continue;
+      var r = el.getBoundingClientRect();
+      if (r.width > vw + 2 || r.right > vw + 2) {
+        var nome = el.tagName.toLowerCase() + (typeof el.className === 'string' && el.className ? '.' + el.className.split(' ')[0] : '');
+        achados.push('<div style="padding:4px 0;border-bottom:1px solid #223"><b style="color:#f87171">'
+          + Math.round(r.width) + 'px</b> (dir: ' + Math.round(r.right) + ') — ' + nome
+          + '<br><span style="color:#9aa4c8">' + (el.textContent || '').trim().slice(0, 30) + '</span></div>');
+        if (r.width > maior) { maior = Math.round(r.width); maiorNome = nome; }
+      }
+    }
+
+    var linha = function (k, v, cor) {
+      return '<div style="display:flex;justify-content:space-between;gap:8px;padding:3px 0">'
+        + '<span style="color:#9aa4c8">' + k + '</span><b style="color:' + (cor || '#fff') + '">' + v + '</b></div>';
+    };
+
+    box.innerHTML =
+      '<div style="font-weight:800;color:#f6b92b;margin-bottom:6px">DIAGNÓSTICO DA PÁGINA REAL</div>'
+      + linha('Tela (CSS)', vw + ' px')
+      + linha('Conteúdo (scrollWidth)', document.documentElement.scrollWidth + ' px',
+              document.documentElement.scrollWidth > vw + 2 ? '#f87171' : '#4ade80')
+      + linha('Zoom (visualViewport)', window.visualViewport ? visualViewport.scale.toFixed(2) : '—',
+              (window.visualViewport && visualViewport.scale > 1.02) ? '#f87171' : '#4ade80')
+      + linha('Largura visível', window.visualViewport ? Math.round(visualViewport.width) + ' px' : '—')
+      + linha('font-size do body', getComputedStyle(document.body).fontSize)
+      + linha('Elementos largos demais', achados.length, achados.length ? '#f87171' : '#4ade80')
+      + (achados.length
+          ? '<div style="margin-top:8px;font-weight:700;color:#f6b92b">CULPADOS (maior: ' + maiorNome + ' = ' + maior + 'px)</div>' + achados.slice(0, 12).join('')
+          : '<div style="margin-top:8px;color:#4ade80;font-weight:700">Nenhum elemento ultrapassa a tela ✓</div>');
+
+    document.body.appendChild(box);
+  }, 3000);
+}
 </script>
 
 <!-- barra de progresso de leitura (preenchida pelo JS) -->
