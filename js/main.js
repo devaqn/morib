@@ -29,6 +29,9 @@ const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer  = matchMedia('(pointer: fine)').matches;
 const canHover     = finePointer && !reduceMotion;
+// a propriedade CSS "scale" (isolada) só existe em navegadores recentes;
+// onde não existe, o zoom-buffer da galeria precisa ir dentro do transform
+const hasScaleProp = !!(window.CSS && CSS.supports && CSS.supports('scale', '1'));
 
 /* ---------- 02. TÍTULO DO HERO PALAVRA POR PALAVRA ----------
    Cada palavra é embrulhada numa "janela" (.word, overflow hidden)
@@ -205,7 +208,10 @@ function onScroll() {
       const r = p.el.getBoundingClientRect();
       if (r.bottom < -80 || r.top > vh + 80) continue;      // fora da tela: pula
       const off = (r.top + r.height / 2) - vh / 2;
-      p.el.style.transform = `translate3d(0, ${(-off * p.speed).toFixed(1)}px, 0)`;
+      // navegador sem a propriedade "scale": o zoom-buffer (data-pscale)
+      // entra no próprio transform, para o parallax não abrir bordas
+      const extra = (!hasScaleProp && p.el.dataset.pscale) ? ` scale(${p.el.dataset.pscale})` : '';
+      p.el.style.transform = `translate3d(0, ${(-off * p.speed).toFixed(1)}px, 0)` + extra;
     }
 
     // letreiro acelera com a velocidade do scroll e desacelera sozinho

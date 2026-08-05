@@ -99,8 +99,9 @@ section{scroll-margin-top:84px} /* âncoras não ficam escondidas sob o header *
    inteira). Aplicado a todo texto de conteúdo — rede de segurança
    final contra qualquer palavra que, por qualquer motivo (autosizer,
    hinting de fonte, densidade de tela), acabe maior que sua caixa. */
-body{overflow-wrap:anywhere;word-break:normal}
-h1,h2,h3,p,span,li,a,b,small,summary,label{overflow-wrap:anywhere}
+/* break-word primeiro = fallback para navegadores sem "anywhere" (Safari ≤15) */
+body{overflow-wrap:break-word;overflow-wrap:anywhere;word-break:normal}
+h1,h2,h3,p,span,li,a,b,small,summary,label{overflow-wrap:break-word;overflow-wrap:anywhere}
 /* min-width:0 nos ITENS de grid/flex para poderem encolher até caber
    (não aplico em botões para o texto deles não vazar) */
 .hero-grid > *, .spk > *, .int-grid > *, .gal-row > *, .chg > *,
@@ -111,10 +112,11 @@ h1,h2,h3,p,span,li,a,b,small,summary,label{overflow-wrap:anywhere}
 .nav .btn{white-space:nowrap;flex:none}
 
 /* ---------- 03. UTILITÁRIOS ---------- */
-.wrap{width:min(1120px,calc(100% - 48px));margin-inline:auto}
+/* sem min()/margin-inline: mesmo resultado, funciona em navegador antigo */
+.wrap{width:calc(100% - 48px);max-width:1120px;margin:0 auto}
 
 h1,h2,h3{font-family:var(--f-disp);letter-spacing:-.02em}
-h2{font-size:clamp(1.75rem,3.6vw,2.6rem);font-weight:800;line-height:1.12;color:var(--ink)}
+h2{font-size:2rem;font-size:clamp(1.75rem,3.6vw,2.6rem);font-weight:800;line-height:1.12;color:var(--ink)}
 .lede{font-size:1.06rem;color:var(--body);max-width:60ch}
 
 /* rótulo de seção com quadradinho amarelo */
@@ -126,7 +128,7 @@ h2{font-size:clamp(1.75rem,3.6vw,2.6rem);font-weight:800;line-height:1.12;color:
 .kicker::before{content:"";width:10px;height:10px;background:var(--yellow);border-radius:2px;flex:none}
 
 /* cabeçalho de seção: título à esquerda, numeração à direita */
-.sec-top{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:end;margin-bottom:clamp(2.2rem,5vw,3.4rem)}
+.sec-top{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:end;margin-bottom:2.8rem;margin-bottom:clamp(2.2rem,5vw,3.4rem)}
 .sec-top .lede{margin-top:.9rem}
 .sec-num{font-family:var(--f-accent);font-size:1.05rem;color:var(--yellow-d)}
 
@@ -229,9 +231,10 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 /* eco gigante de ORATÓRIA ao fundo */
 .pre-word{
   position:absolute;left:50%;bottom:-1%;transform:translateX(-50%);
-  font-family:var(--f-accent);font-size:clamp(5rem,22vw,17rem);line-height:1;
+  font-family:var(--f-accent);font-size:9rem;font-size:clamp(5rem,22vw,17rem);line-height:1;
   color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.045);
-  white-space:nowrap;pointer-events:none;user-select:none;z-index:1;
+  white-space:nowrap;pointer-events:none;
+  -webkit-user-select:none;user-select:none;z-index:1;
 }
 
 /* marca central */
@@ -241,10 +244,10 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 }
 .pre-brand{display:flex;flex-direction:column;align-items:center;animation:preIn .85s var(--ease-out) both}
 .pre-mark{
-  font-family:var(--f-accent);font-size:clamp(3.6rem,10vw,5.4rem);line-height:1;
+  font-family:var(--f-accent);font-size:4.4rem;font-size:clamp(3.6rem,10vw,5.4rem);line-height:1;
   color:var(--yellow);text-shadow:0 10px 50px rgba(246,185,43,.4);
 }
-.pre-logo{display:none;max-height:clamp(72px,12vw,116px);width:auto;filter:drop-shadow(0 10px 40px rgba(0,0,0,.4))}
+.pre-logo{display:none;max-height:96px;max-height:clamp(72px,12vw,116px);width:auto;filter:drop-shadow(0 10px 40px rgba(0,0,0,.4))}
 .pre-brand.has-logo .pre-mark{display:none}
 .pre-brand.has-logo .pre-logo{display:block}
 .pre-name{margin-top:.85rem;font-family:var(--f-disp);font-weight:800;letter-spacing:.3em;font-size:.95rem;color:#fff;text-transform:uppercase}
@@ -261,15 +264,17 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 
 /* rodapé editorial: status à esquerda, número gigante à direita */
 .pre-foot{
-  position:absolute;left:0;right:0;bottom:calc(clamp(1.4rem,4vw,2.4rem) + 2px);z-index:2;
+  position:absolute;left:0;right:0;z-index:2;
+  bottom:2rem;bottom:calc(clamp(1.4rem,4vw,2.4rem) + 2px);
   display:flex;align-items:flex-end;justify-content:space-between;
+  padding-left:2rem;padding-right:2rem;          /* fallback universal */
   padding-inline:clamp(1.4rem,5vw,3.6rem);
   animation:preIn .85s var(--ease-out) .3s both;
 }
 .pre-status{font-size:.64rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.5);padding-bottom:.6rem}
 .pre-count{display:flex;align-items:flex-start;gap:.08em;font-family:var(--f-accent);color:#fff;line-height:.82}
-.pre-count b{font-weight:400;font-size:clamp(2.8rem,10vw,5.2rem);font-variant-numeric:tabular-nums}
-.pre-count i{font-style:normal;font-size:clamp(1rem,2.6vw,1.5rem);color:var(--yellow);margin-top:.35em}
+.pre-count b{font-weight:400;font-size:4rem;font-size:clamp(2.8rem,10vw,5.2rem);font-variant-numeric:tabular-nums}
+.pre-count i{font-style:normal;font-size:1.2rem;font-size:clamp(1rem,2.6vw,1.5rem);color:var(--yellow);margin-top:.35em}
 
 /* linha de progresso de ponta a ponta (no rodapé absoluto da tela) */
 .pre-track{position:absolute;left:0;right:0;bottom:0;height:2px;background:rgba(255,255,255,.1);z-index:2}
@@ -290,6 +295,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
     radial-gradient(40% 44% at 0% 100%, rgba(28,36,80,.6), transparent 70%),
     var(--navy-900);
   color:#fff;
+  padding:8rem 0 4rem; /* fallback para navegadores sem clamp() */
   padding:clamp(7.2rem,12vw,9.5rem) 0 clamp(3.4rem,6vw,5rem);
   position:relative;overflow:hidden;
   contain:paint; /* clipa a marca d'água ORATÓRIA (parallax) mesmo no iOS */
@@ -297,9 +303,10 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 /* marca d'água ORATÓRIA — o JS aplica parallax sutil nela */
 .hero-mark{
   position:absolute;bottom:-.14em;left:-.03em;
-  font-family:var(--f-accent);font-size:clamp(7rem,19vw,17rem);line-height:1;
+  font-family:var(--f-accent);font-size:11rem;font-size:clamp(7rem,19vw,17rem);line-height:1;
   color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.05);
-  pointer-events:none;white-space:nowrap;user-select:none;
+  pointer-events:none;white-space:nowrap;
+  -webkit-user-select:none;user-select:none; /* prefixo p/ Safari */
   will-change:transform;
 }
 /* desktop: título e texto empilhados à esquerda; foto à direita,
@@ -310,7 +317,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   grid-template-areas:
     "lead photo"
     "body photo";
-  column-gap:clamp(2.4rem,6vw,4.5rem);row-gap:0;
+  column-gap:3rem;column-gap:clamp(2.4rem,6vw,4.5rem);row-gap:0;
   align-items:center;position:relative;z-index:1;
 }
 .hero-lead{grid-area:lead}
@@ -332,7 +339,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 }
 .hero .kicker{color:rgba(255,255,255,.65)}
 .hero h1{
-  font-size:clamp(2.5rem,5.6vw,4.15rem);
+  font-size:2.9rem;font-size:clamp(2.5rem,5.6vw,4.15rem);
   font-weight:800;line-height:1.04;letter-spacing:-.03em;color:#fff;
 }
 /* a palavra "oratória" em serifa dourada com brilho que varre
@@ -358,7 +365,8 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 .hero-meta{
   display:grid;grid-template-columns:repeat(3,auto);gap:2.2rem;
   border-top:1px solid var(--hair-d);
-  margin-top:2.6rem;padding-top:1.5rem;width:fit-content;
+  margin-top:2.6rem;padding-top:1.5rem;
+  width:-webkit-fit-content;width:fit-content; /* prefixo p/ Safari antigo */
 }
 .hero-meta div{display:flex;flex-direction:column;gap:.15rem}
 .hero-meta small{font-size:.62rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.45)}
@@ -450,7 +458,8 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
    onde o overflow:hidden sozinho não segurava o filho animado). */
 .marquee{
   position:relative;overflow:hidden;
-  height:2.9rem;border-block:1px solid var(--hair);background:#fff;
+  height:2.9rem;background:#fff;
+  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair); /* longhand: universal */
   contain:layout paint; /* isola totalmente o layout interno */
 }
 .marquee-track{
@@ -468,8 +477,8 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 .marquee i{font-style:normal;color:var(--yellow-d)}
 
 /* ---------- 11. APRESENTADOR ---------- */
-.section{padding:clamp(4.2rem,8.5vw,6.8rem) 0}
-.spk{display:grid;grid-template-columns:.88fr 1.12fr;gap:clamp(2.6rem,6vw,5rem);align-items:center}
+.section{padding:5rem 0;padding:clamp(4.2rem,8.5vw,6.8rem) 0}
+.spk{display:grid;grid-template-columns:.88fr 1.12fr;gap:3rem;gap:clamp(2.6rem,6vw,5rem);align-items:center}
 /* MOBILE: nada de CSS Grid — vira empilhamento simples (block).
    Motivo: sob a "Escala de texto" de acessibilidade do Chrome
    Android (que não pode ser desativada por CSS, de propósito),
@@ -544,7 +553,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 .aud li:hover{padding-left:1.1rem}
 .aud li:hover::before{transform:scaleY(1)}
 .aud .n{font-family:var(--f-accent);font-size:1rem;color:var(--yellow-d)}
-.aud h3{font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:800;color:var(--ink)}
+.aud h3{font-size:1.3rem;font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:800;color:var(--ink)}
 .aud p{color:var(--body);font-size:.95rem;text-align:right;max-width:36ch}
 @media (max-width:700px){
   /* flexbox no lugar de Grid (mesmo motivo das outras seções) */
@@ -573,7 +582,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 .chg p{font-size:.92rem;color:var(--body)}
 .chg-foot{
   display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;
-  margin-top:clamp(2.6rem,5vw,3.4rem);padding-top:1.6rem;border-top:1px solid var(--hair);
+  margin-top:3rem;margin-top:clamp(2.6rem,5vw,3.4rem);padding-top:1.6rem;border-top:1px solid var(--hair);
 }
 .chg-foot small{color:var(--body);font-size:.88rem}
 
@@ -585,19 +594,19 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   background:url("../img/integra-cream.png") center/contain no-repeat;
   opacity:.06;pointer-events:none;
 }
-.int-grid{display:grid;grid-template-columns:auto 1fr;gap:clamp(2.6rem,7vw,5.5rem);align-items:center;position:relative;z-index:1}
+.int-grid{display:grid;grid-template-columns:auto 1fr;gap:3.5rem;gap:clamp(2.6rem,7vw,5.5rem);align-items:center;position:relative;z-index:1}
 /* MOBILE: mesmo motivo do .spk — Grid vira bloco simples empilhado,
    imune ao recálculo incorreto de largura sob a "Escala de texto"
    de acessibilidade do Chrome Android. */
 @media (max-width:860px){
   .int-grid{display:block}
   .int-grid > *{width:100%;max-width:100%}
-  .int-logo{margin-inline:auto}          /* mantém o círculo centralizado */
+  .int-logo{margin-left:auto;margin-right:auto} /* mantém o círculo centralizado (sem margin-inline: universal) */
   .int-grid > * + *{margin-top:1.8rem}
 }
 /* logo dentro de anel que gira lentíssimo — vida sem distração */
 .int-logo{
-  width:clamp(180px,22vw,240px);aspect-ratio:1;border-radius:50%;
+  width:220px;width:clamp(180px,22vw,240px);aspect-ratio:1;border-radius:50%;
   border:1px solid rgba(255,255,255,.18);
   display:flex;align-items:center;justify-content:center;
   background:radial-gradient(60% 60% at 50% 42%, rgba(246,185,43,.1), transparent 72%);
@@ -671,7 +680,7 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
    Banner cinematográfico + trio de tiles; hover com zoom;
    clique abre o lightbox (JS). */
 .stage{background:var(--navy-950);color:#fff;position:relative}
-.stage .sec-top{margin-bottom:clamp(1.8rem,4vw,2.6rem)}
+.stage .sec-top{margin-bottom:2.2rem;margin-bottom:clamp(1.8rem,4vw,2.6rem)}
 .stage .kicker{color:rgba(255,255,255,.6)}
 .stage h2{color:#fff}
 .stage .sec-num{color:var(--yellow-d)}
@@ -689,9 +698,11 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   background:linear-gradient(90deg,rgba(11,16,41,.75) 0%,rgba(11,16,41,.15) 45%,transparent 70%);
 }
 .gal-cap{
-  position:absolute;left:clamp(1.2rem,3vw,2.4rem);bottom:clamp(1.2rem,3vw,2rem);z-index:2;max-width:24ch;
+  position:absolute;z-index:2;max-width:24ch;
+  left:1.6rem;left:clamp(1.2rem,3vw,2.4rem);
+  bottom:1.4rem;bottom:clamp(1.2rem,3vw,2rem);
 }
-.gal-cap b{display:block;font-family:var(--f-disp);font-weight:800;font-size:clamp(1.1rem,2.2vw,1.6rem);line-height:1.2}
+.gal-cap b{display:block;font-family:var(--f-disp);font-weight:800;font-size:1.25rem;font-size:clamp(1.1rem,2.2vw,1.6rem);line-height:1.2}
 .gal-cap span{font-size:.8rem;color:rgba(255,255,255,.7);font-weight:600}
 .gal-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:1.1rem}
 @media (max-width:720px){.gal-row{grid-template-columns:1fr 1fr}}
@@ -776,8 +787,11 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
   pointer-events:none;
 }
 .cta .wrap{
-  display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2.4rem,6vw,4.5rem);
-  align-items:center;padding-block:clamp(3.6rem,7vw,5.5rem);
+  display:grid;grid-template-columns:1.05fr .95fr;
+  gap:3rem;gap:clamp(2.4rem,6vw,4.5rem);
+  align-items:center;
+  padding-top:4.5rem;padding-bottom:4.5rem;      /* fallback universal */
+  padding-block:clamp(3.6rem,7vw,5.5rem);
   position:relative;z-index:1;
 }
 @media (max-width:880px){
@@ -787,11 +801,11 @@ header.solid .brand span,header.solid .nav-phone small{color:var(--body)}
 }
 .cta .kicker{color:rgba(16,23,58,.6)}
 .cta .kicker::before{background:var(--navy-900)}
-.cta h2{color:var(--navy-900);letter-spacing:-.03em;font-size:clamp(1.9rem,4.2vw,3rem);max-width:16ch}
+.cta h2{color:var(--navy-900);letter-spacing:-.03em;font-size:2.3rem;font-size:clamp(1.9rem,4.2vw,3rem);max-width:16ch}
 .cta p{color:rgba(16,23,58,.72);margin-top:1rem;max-width:46ch;font-size:1rem}
 .cta-box{
   background:#fff;border-radius:calc(var(--r) + 4px);
-  padding:clamp(1.6rem,3.5vw,2.2rem);
+  padding:1.9rem;padding:clamp(1.6rem,3.5vw,2.2rem);
   box-shadow:0 28px 60px -30px rgba(11,16,41,.45);
   transition:transform .35s var(--ease-out),box-shadow .35s ease;
 }
@@ -854,6 +868,7 @@ footer small{color:rgba(255,255,255,.4);font-size:.76rem;line-height:1.7}
 }
 .sticky-cta{
   position:fixed;inset:auto 0 0 0;z-index:65;
+  padding:.7rem 1rem; /* fallback: navegador sem env() não pode perder o padding todo */
   padding:.7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
   background:rgba(255,255,255,.97);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
   border-top:1px solid var(--hair);
@@ -904,10 +919,11 @@ footer small{color:rgba(255,255,255,.4);font-size:.76rem;line-height:1.7}
 .reveal.rv-scale{transform:scale(.9)}
 /* cortina: revela de cima para baixo (clip-path próprio, com transição) */
 .reveal.rv-clip{
-  transform:none;filter:none;clip-path:inset(0 0 100% 0);
+  transform:none;filter:none;
+  -webkit-clip-path:inset(0 0 100% 0);clip-path:inset(0 0 100% 0); /* prefixo p/ Safari ≤13 */
   transition:clip-path 1s var(--ease-out) var(--d,0s),opacity .9s var(--ease-out) var(--d,0s);
 }
-.reveal.rv-clip.on{clip-path:inset(0 0 0 0)}
+.reveal.rv-clip.on{-webkit-clip-path:inset(0 0 0 0);clip-path:inset(0 0 0 0)}
 
 /* --- botões magnéticos: seguem levemente o cursor (JS) --- */
 .btn.is-magnetic{will-change:transform}
@@ -927,8 +943,8 @@ footer small{color:rgba(255,255,255,.4);font-size:.76rem;line-height:1.7}
   transition:background .2s ease,transform .25s var(--ease-spring);
 }
 .lightbox-nav:hover{background:rgba(255,255,255,.22)}
-.lightbox-nav.prev{left:clamp(.6rem,3vw,2rem)}
-.lightbox-nav.next{right:clamp(.6rem,3vw,2rem)}
+.lightbox-nav.prev{left:1rem;left:clamp(.6rem,3vw,2rem)}
+.lightbox-nav.next{right:1rem;right:clamp(.6rem,3vw,2rem)}
 .lightbox-nav.prev:hover{transform:translateY(-50%) translateX(-3px)}
 .lightbox-nav.next:hover{transform:translateY(-50%) translateX(3px)}
 .lightbox-count{
@@ -1030,4 +1046,53 @@ summary:focus:not(:focus-visible){outline:none}
   /* preloader some com um fade rápido em vez de cortina/pulso */
   #preloader{transition:opacity .3s ease}
   #preloader.done{transform:none;opacity:0}
+}
+
+/* ============================================================
+   20b. COMPATIBILIDADE COM NAVEGADORES ANTIGOS
+   ------------------------------------------------------------
+   a) "inset" (atalho) só existe no Safari 14.5+/Chrome 87+.
+      Nos navegadores antigos a declaração é DESCARTADA e o
+      elemento perde o posicionamento. As regras abaixo repetem
+      os mesmos valores em top/right/bottom/left — em navegador
+      moderno são redundantes (mesmo resultado), em navegador
+      antigo são a salvação.
+   b) "aspect-ratio" só existe no Safari 15+/Chrome 88+. Sem ele,
+      as molduras de foto colapsam. O @supports abaixo recria a
+      proporção com o truque clássico do padding-top (que funciona
+      em qualquer navegador desde sempre).
+   ============================================================ */
+
+/* --- a) fallbacks de inset (mesmos valores, forma antiga) --- */
+header{top:0;left:0;right:0;bottom:auto}
+#preloader{top:0;left:0;right:0;bottom:0}
+.pre-sheen{top:0;left:0;right:0;bottom:0}
+.pre-stage{top:0;left:0;right:0;bottom:0}
+.lightbox{top:0;left:0;right:0;bottom:0}
+.sticky-cta{top:auto;left:0;right:0;bottom:0}
+.hero::before{top:0;left:0;right:0;bottom:0}
+.wa-float::after{top:0;left:0;right:0;bottom:0}
+.photo-card::before{top:-9px;left:-9px;right:-9px;bottom:-9px}
+.photo-card:hover::before{top:-14px;left:-14px;right:-14px;bottom:-14px}
+.spk-visual .frame::after{top:0;left:0;right:0;bottom:0}
+.gal-hero::after{top:0;left:0;right:0;bottom:0}
+.gal-tile::after{top:0;left:0;right:0;bottom:0}
+.int-logo::after{top:-12px;left:-12px;right:-12px;bottom:-12px}
+.cta::before{top:-40%;left:-40%;right:-40%;bottom:-40%}
+
+/* --- b) proporção das fotos sem aspect-ratio (padding-top) --- */
+@supports not (aspect-ratio: 1 / 1){
+  .photo-card .ph,
+  .spk-visual .frame,
+  .gal-tile{height:0;padding-top:125%;position:relative}   /* 4/5 */
+  .gal-hero{height:0;padding-top:42.86%;position:relative} /* 21/9 */
+  @media (max-width:640px){
+    .gal-hero{padding-top:66.67%}                           /* 3/2 */
+  }
+  .photo-card .ph img,
+  .spk-visual .frame img,
+  .gal-tile img,
+  .gal-hero img{position:absolute;top:0;left:0;width:100%;height:100%}
+  .int-logo{height:220px}          /* círculo: altura = largura fallback */
+  .integra::before{height:60vw;max-height:560px}
 }
